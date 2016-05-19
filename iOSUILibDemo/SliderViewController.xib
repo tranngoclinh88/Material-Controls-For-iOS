@@ -91,6 +91,9 @@
                                     <real key="value" value="9"/>
                                 </userDefinedRuntimeAttribute>
                                 <userDefinedRuntimeAttribute type="boolean" keyPath="enabledValueLabel" value="YES"/>
+                                <userDefinedRuntimeAttribute type="color" keyPath="tickMarksColor">
+                                    <color key="value" red="1" green="0.041036519703868346" blue="0.010226881207028415" alpha="1" colorSpace="calibratedRGB"/>
+                                </userDefinedRuntimeAttribute>
                             </userDefinedRuntimeAttributes>
                             <variation key="default">
                                 <mask key="constraints">
