@@ -732,10 +732,12 @@
 
   if (_singleLine) {
     if (![_text isEqualToString:_textField.text]) {
+      [self inputTextDidBeginEditing:_textField.text.length];
       _textField.text = text;
     }
   } else {
     if (![_text isEqualToString:_textView.text]) {
+      [self inputTextDidBeginEditing:_textView.text.length];
       _textView.text = text;
     }
   }
