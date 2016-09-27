@@ -501,6 +501,11 @@
   [self updateColors];
 }
 
+- (void)setTickMarksColor:(UIColor *)tickMarksColor {
+    _tickMarksColor = tickMarksColor;
+    [tickMarksView setTickColor:_tickMarksColor];
+}
+
 - (void)setDisabledColor:(UIColor *)disabledColor {
   _disabledColor = disabledColor;
   [self updateColors];
