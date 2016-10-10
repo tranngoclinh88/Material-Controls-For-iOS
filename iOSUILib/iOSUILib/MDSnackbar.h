@@ -48,11 +48,12 @@ IB_DESIGNABLE
 @property(nonatomic) double bottomPadding;
 @property(nonatomic) BOOL swipeable;
 @property(nonatomic) BOOL multiline;
+@property(nonatomic) CGFloat maxWidth;
 @property(nonatomic, readonly) BOOL isShowing;
 
 - (instancetype)initWithText:(NSString *)text actionTitle:(NSString *)action;
 - (instancetype)initWithText:(NSString *)text
-                 actionTitle:(NSString *)action
+                 actionTitle:(nullable NSString *)action
                     duration:(double)duration;
 
 - (void)show;

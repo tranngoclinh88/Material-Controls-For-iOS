@@ -31,7 +31,7 @@
 #define kMDLargePadding 24
 #define kMDCornerRadius 2
 #define kMDMinWidth 288
-#define kMDMaxWidth 568
+#define kMDDefaultMaxWidth 568
 
 @interface MDSnackbarManger : NSObject
 
@@ -58,6 +58,7 @@ MDSnackbarManger *snackbarManagerInstance;
 - (instancetype)init {
   if (self = [super init]) {
     [self createContent];
+    self.maxWidth = kMDDefaultMaxWidth;
   }
   return self;
 }
@@ -67,6 +68,7 @@ MDSnackbarManger *snackbarManagerInstance;
     [self createContent];
     self.text = text;
     self.actionTitle = action;
+    self.maxWidth = kMDDefaultMaxWidth;
   }
   return self;
 }
@@ -79,6 +81,7 @@ MDSnackbarManger *snackbarManagerInstance;
     self.text = text;
     self.actionTitle = action;
     self.duration = duration;
+    self.maxWidth = kMDDefaultMaxWidth;
   }
   return self;
 }
@@ -201,7 +204,7 @@ MDSnackbarManger *snackbarManagerInstance;
                                         toItem:nil
                                      attribute:NSLayoutAttributeNotAnAttribute
                                     multiplier:1.0
-                                      constant:kMDMaxWidth];
+                                      constant:self.maxWidth];
     [self addConstraint:maxWidthConstraint];
   }
 }
