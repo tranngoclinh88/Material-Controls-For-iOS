@@ -9,6 +9,8 @@
     <RootNamespace>MaterialControls.Xamarin.Binding</RootNamespace>
     <AssemblyName>MaterialControls.Xamarin.Binding</AssemblyName>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
+    <ReleaseVersion>1.2.0</ReleaseVersion>
+    <SynchReleaseVersion>false</SynchReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
