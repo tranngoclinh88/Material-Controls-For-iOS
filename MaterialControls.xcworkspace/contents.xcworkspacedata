@@ -2,9 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:testtesttest/testtesttest.xcodeproj">
-   </FileRef>
-   <FileRef
       location = "group:MaterialControls.Sample/MaterialControls.Sample.xcodeproj">
    </FileRef>
    <FileRef

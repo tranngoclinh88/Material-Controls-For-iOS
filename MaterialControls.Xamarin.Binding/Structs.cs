@@ -1,13 +1,16 @@
-using System;
-using System.Runtime.InteropServices;
-using CoreGraphics;
+﻿using System;
 using ObjCRuntime;
 
-namespace MaterialControls
-{
+namespace MaterialControls {
+
+	public enum MDButtonType : uint {
+		Raised,
+		Flat,
+		FloatingAction
+	}
+
 	[Native]
-	public enum MDCalendarMonthSymbolsFormat : nint
-	{
+	public enum MDCalendarMonthSymbolsFormat : long /* nint */ {
 		Short = 0,
 		Full = 1,
 		ShortUppercase = 2,
@@ -15,15 +18,13 @@ namespace MaterialControls
 	}
 
 	[Native]
-	public enum MDCalendarCellStyle : nint
-	{
+	public enum MDCalendarCellStyle : long /* nint */ {
 		Circle = 0,
 		Rectangle = 1
 	}
 
 	[Native]
-	public enum MDCalendarCellState : nint
-	{
+	public enum MDCalendarCellState : long /* nint */ {
 		Normal = 0,
 		Selected = 1,
 		Placeholder = 1 << 1,
@@ -36,29 +37,38 @@ namespace MaterialControls
 	}
 
 	[Native]
-	public enum MDCalendarTheme : nint
-	{
+	public enum MDCalendarTheme : long /* nint */ {
 		Light = 1,
 		Dark = 2
 	}
 
-	[Native]
-	public enum MDClockMode : nint
-	{
-		MDClockMode12H,
-		MDClockMode24H
+	public enum MDProgressStyle : uint {
+		Circular,
+		Linear
+	}
+
+	public enum MDProgressType : uint {
+		Indeterminate,
+		Determinate,
+		Buffer,
+		QueryIndeterminateAndDeterminate
+	}
+
+	public enum ViewState : uint {
+		NORMAL,
+		HIGHLIGHT,
+		ERROR,
+		DISABLED
 	}
 
 	[Native]
-	public enum MDTimePickerTheme : nint
-	{
-		Light = 1,
-		Dark
+	public enum MDCalendarTimeMode : long /* nint */ {
+		MDCalendarTimeMode12H,
+		MDCalendarTimeMode24H
 	}
 
 	[Native]
-	public enum MDFontFamilySize : nint
-	{
+	public enum MDFontFamilySize : long /* nint */ {
 		Regular = 0,
 		Bold = 1,
 		Light = 2,
@@ -68,66 +78,9 @@ namespace MaterialControls
 	}
 
 	[Native]
-	public enum MDFontFamilyType : nint
-	{
+	public enum MDFontFamilyType : long /* nint */ {
 		Bold = 1,
 		Italic = 2
 	}
-
-	static class CFunctions
-	{
-		// CGPoint CGRectCenter (CGRect rect) __attribute__((cf_audited_transfer));
-		[DllImport ("__Internal")]
-		[Verify (PlatformInvoke)]
-		static extern CGPoint CGRectCenter (CGRect rect);
-
-		// CGPoint CGRectCenter (CGRect rect) __attribute__((cf_audited_transfer));
-		[DllImport ("__Internal")]
-		[Verify (PlatformInvoke)]
-		static extern CGPoint CGRectCenter (CGRect rect);
-	}
-
-	[Native]
-	public enum MDButtonType : nint
-	{
-		Raised,
-		Flat,
-		FloatingAction,
-		FloatingActionRotation
-	}
-
-	[Native]
-	public enum MDProgressStyle : nint
-	{
-		Circular,
-		Linear
-	}
-
-	[Native]
-	public enum MDProgressType : nint
-	{
-		Indeterminate,
-		Determinate
-	}
-
-	[Native]
-	public enum MDTextFieldViewState : nint
-	{
-		Normal,
-		Highlighted,
-		Error,
-		Disabled
-	}
-
-	[Native]
-	public enum MDGravity : nint
-	{
-		None = 0,
-		Top = 1 << 0,
-		Bottom = 1 << 1,
-		Left = 1 << 2,
-		Right = 1 << 3,
-		CenterHorizontal = 1 << 4,
-		CenterVertical = 1 << 5
-	}
 }
+

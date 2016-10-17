@@ -4,3 +4,9 @@ iOSUILib/iOSUILib.xcodeproj/xcuserdata/bachpx1.xcuserdatad/xcschemes/xcschememan
 iOSUILibDemo/TestTextFieldViewController.h
 iOSUILibDemo/TestTextFieldViewController.m
 iOSUILibDemo/TestTextFieldViewController.xib
+MaterialControls/libMaterialControls-arm64.a
+MaterialControls/libMaterialControls-armv7.a
+MaterialControls/libMaterialControls-i386.a
+MaterialControls/libMaterialControls.a
+MaterialControls/Binding
+MaterialControls/sharpie-build

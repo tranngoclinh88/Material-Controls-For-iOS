@@ -1,1496 +1,1106 @@
-using System;
-using CoreAnimation;
-using CoreGraphics;
+﻿using System;
+using System.Drawing;
+
+using UIKit;
 using Foundation;
 using ObjCRuntime;
-using UIKit;
+using CoreGraphics;
+using System.ComponentModel;
+using CoreAnimation;
 
 namespace MaterialControls
 {
-	// @interface AutoResizeTextView : UITextView
-	[BaseType (typeof(UITextView))]
-	interface AutoResizeTextView
+
+	// @interface MDButton : UIButton
+	[BaseType(typeof(UIButton))]
+	interface MDButton
 	{
-		// @property (copy, nonatomic) NSString * _Nullable placeholder;
-		[NullAllowed, Export ("placeholder")]
-		string Placeholder { get; set; }
 
-		// @property (nonatomic) NSInteger minVisibleLines;
-		[Export ("minVisibleLines")]
-		nint MinVisibleLines { get; set; }
+		// -(id)initWithFrame:(CGRect)frame type:(enum MDButtonType)buttonType rippleColor:(UIColor *)rippleColor;
+		[Export("initWithFrame:type:rippleColor:")]
+		IntPtr Constructor(CGRect frame, MDButtonType buttonType, UIColor rippleColor);
 
-		// @property (nonatomic) NSInteger maxVisibleLines;
-		[Export ("maxVisibleLines")]
-		nint MaxVisibleLines { get; set; }
+		// @property (nonatomic) UIColor * rippleColor;
+		[Export("rippleColor")]
+		UIColor RippleColor { get; set; }
 
-		// @property (nonatomic) float maxHeight;
-		[Export ("maxHeight")]
-		float MaxHeight { get; set; }
+		// @property (nonatomic) int type;
+		[Export("type")]
+		int Type { get; set; }
 
-		// @property (nonatomic) UIColor * _Nullable placeholderColor;
-		[NullAllowed, Export ("placeholderColor", ArgumentSemantic.Assign)]
-		UIColor PlaceholderColor { get; set; }
+		// @property (nonatomic) enum MDButtonType mdButtonType;
+		[Export("mdButtonType")]
+		MDButtonType MdButtonType { get; set; }
 
-		// @property (nonatomic, weak) MDTextField * _Nullable holder;
-		[NullAllowed, Export ("holder", ArgumentSemantic.Weak)]
-		MDTextField Holder { get; set; }
+		// @property (nonatomic, getter = isEnabled) BOOL enabled;
+		[Export("enabled")]
+		bool Enabled { [Bind("isEnabled")] get; set; }
 	}
 
 	// @protocol MDCalendarDateHeaderDelegate
 	[Protocol, Model]
+	[BaseType(typeof(NSObject))]
 	interface MDCalendarDateHeaderDelegate
 	{
+
 		// @required -(void)didSelectCalendar;
+		[Export("didSelectCalendar")]
 		[Abstract]
-		[Export ("didSelectCalendar")]
-		void DidSelectCalendar ();
+		void DidSelectCalendar();
 
 		// @required -(void)didSelectYear;
+		[Export("didSelectYear")]
 		[Abstract]
-		[Export ("didSelectYear")]
-		void DidSelectYear ();
+		void DidSelectYear();
 	}
 
 	// @interface MDCalendarDateHeader : UIView
-	[BaseType (typeof(UIView))]
+	[BaseType(typeof(UIView))]
 	interface MDCalendarDateHeader
 	{
-		// @property (nonatomic) UILabel * _Nonnull labelDayName;
-		[Export ("labelDayName", ArgumentSemantic.Assign)]
+
+		// @property (nonatomic) UILabel * labelDayName;
+		[Export("labelDayName")]
 		UILabel LabelDayName { get; set; }
 
-		// @property (nonatomic) UILabel * _Nonnull labelMonthName;
-		[Export ("labelMonthName", ArgumentSemantic.Assign)]
+		// @property (nonatomic) UILabel * labelMonthName;
+		[Export("labelMonthName")]
 		UILabel LabelMonthName { get; set; }
 
-		// @property (nonatomic) UILabel * _Nonnull labelDate;
-		[Export ("labelDate", ArgumentSemantic.Assign)]
+		// @property (nonatomic) UILabel * labelDate;
+		[Export("labelDate")]
 		UILabel LabelDate { get; set; }
 
-		// @property (nonatomic) UILabel * _Nonnull labelYear;
-		[Export ("labelYear", ArgumentSemantic.Assign)]
+		// @property (nonatomic) UILabel * labelYear;
+		[Export("labelYear")]
 		UILabel LabelYear { get; set; }
 
 		// @property (assign, nonatomic) MDCalendarTheme theme;
-		[Export ("theme", ArgumentSemantic.Assign)]
+		[Export("theme", ArgumentSemantic.UnsafeUnretained)]
 		MDCalendarTheme Theme { get; set; }
 
-		// @property (nonatomic) UIColor * _Nonnull textColor;
-		[Export ("textColor", ArgumentSemantic.Assign)]
+		// @property (nonatomic) UIColor * textColor;
+		[Export("textColor")]
 		UIColor TextColor { get; set; }
 
-		// @property (nonatomic) UIColor * _Nonnull headerColor;
-		[Export ("headerColor", ArgumentSemantic.Assign)]
+		// @property (nonatomic) UIColor * headerColor;
+		[Export("headerColor")]
 		UIColor HeaderColor { get; set; }
 
-		// @property (nonatomic) UIColor * _Nonnull headerBackgroundColor;
-		[Export ("headerBackgroundColor", ArgumentSemantic.Assign)]
+		// @property (nonatomic) UIColor * headerBackgroundColor;
+		[Export("headerBackgroundColor")]
 		UIColor HeaderBackgroundColor { get; set; }
 
 		// @property (nonatomic) MDCalendarMonthSymbolsFormat monthFormat;
-		[Export ("monthFormat", ArgumentSemantic.Assign)]
+		[Export("monthFormat")]
 		MDCalendarMonthSymbolsFormat MonthFormat { get; set; }
 
-		// @property (nonatomic) NSDate * _Nullable date;
-		[NullAllowed, Export ("date", ArgumentSemantic.Assign)]
+		// @property (nonatomic) NSDate * date;
+		[Export("date")]
 		NSDate Date { get; set; }
 
-		// @property (nonatomic) NSDateFormatter * _Nonnull dateFormatter;
-		[Export ("dateFormatter", ArgumentSemantic.Assign)]
+		// @property (nonatomic) NSDateFormatter * dateFormatter;
+		[Export("dateFormatter")]
 		NSDateFormatter DateFormatter { get; set; }
 
-		[Wrap ("WeakDelegate")]
+		// @property (nonatomic, weak) id<MDCalendarDateHeaderDelegate> delegate;
+		[Export("delegate", ArgumentSemantic.Weak)]
 		[NullAllowed]
-		MDCalendarDateHeaderDelegate Delegate { get; set; }
-
-		// @property (nonatomic, weak) id<MDCalendarDateHeaderDelegate> _Nullable delegate;
-		[NullAllowed, Export ("delegate", ArgumentSemantic.Weak)]
 		NSObject WeakDelegate { get; set; }
 
+		// @property (nonatomic, weak) id<MDCalendarDateHeaderDelegate> delegate;
+		[Wrap("WeakDelegate")]
+		MDCalendarDateHeaderDelegate Delegate { get; set; }
+
 		// -(void)showYearSelector;
-		[Export ("showYearSelector")]
-		void ShowYearSelector ();
+		[Export("showYearSelector")]
+		void ShowYearSelector();
 
 		// -(void)showCalendar;
-		[Export ("showCalendar")]
-		void ShowCalendar ();
+		[Export("showCalendar")]
+		void ShowCalendar();
 	}
 
 	// @protocol MDCalendarDelegate <NSObject>
 	[Protocol, Model]
-	[BaseType (typeof(NSObject))]
+	[BaseType(typeof(NSObject))]
 	interface MDCalendarDelegate
 	{
-		// @required -(void)calendar:(MDCalendar * _Nonnull)calendar didSelectDate:(NSDate * _Nullable)date;
+
+		// @required -(void)calendar:(MDCalendar *)calendar didSelectDate:(NSDate *)date;
+		[Export("calendar:didSelectDate:")]
 		[Abstract]
-		[Export ("calendar:didSelectDate:")]
-		void DidSelectDate (MDCalendar calendar, [NullAllowed] NSDate date);
+		void DidSelectDate(MDCalendar calendar, NSDate date);
 	}
 
 	// @interface MDCalendar : UIView <UIAppearance>
-	[BaseType (typeof(UIView))]
+	[BaseType(typeof(UIView))]
 	interface MDCalendar : IUIAppearance
 	{
-		// @property (nonatomic, weak) MDCalendarDateHeader * _Nullable dateHeader __attribute__((iboutlet));
-		[NullAllowed, Export ("dateHeader", ArgumentSemantic.Weak)]
+
+		// @property (nonatomic, weak) MDCalendarDateHeader * dateHeader;
+		[Export("dateHeader", ArgumentSemantic.Weak)]
 		MDCalendarDateHeader DateHeader { get; set; }
 
-		[Wrap ("WeakDelegate")]
+		// @property (nonatomic, weak) id<MDCalendarDelegate> delegate;
+		[Export("delegate", ArgumentSemantic.Weak)]
 		[NullAllowed]
-		MDCalendarDelegate Delegate { get; set; }
-
-		// @property (nonatomic, weak) id<MDCalendarDelegate> _Nullable delegate __attribute__((iboutlet));
-		[NullAllowed, Export ("delegate", ArgumentSemantic.Weak)]
 		NSObject WeakDelegate { get; set; }
 
+		// @property (nonatomic, weak) id<MDCalendarDelegate> delegate;
+		[Wrap("WeakDelegate")]
+		MDCalendarDelegate Delegate { get; set; }
+
 		// @property (assign, nonatomic) BOOL showPlaceholder;
-		[Export ("showPlaceholder")]
+		[Export("showPlaceholder", ArgumentSemantic.UnsafeUnretained)]
 		bool ShowPlaceholder { get; set; }
 
-		// @property (copy, nonatomic) NSDate * _Nonnull currentDate;
-		[Export ("currentDate", ArgumentSemantic.Copy)]
+		// @property (copy, nonatomic) NSDate * currentDate;
+		[Export("currentDate", ArgumentSemantic.Copy)]
 		NSDate CurrentDate { get; set; }
 
-		// @property (copy, nonatomic) NSDate * _Nonnull selectedDate;
-		[Export ("selectedDate", ArgumentSemantic.Copy)]
+		// @property (copy, nonatomic) NSDate * selectedDate;
+		[Export("selectedDate", ArgumentSemantic.Copy)]
 		NSDate SelectedDate { get; set; }
 
-		// @property (copy, nonatomic) NSDate * _Nonnull minimumDate;
-		[Export ("minimumDate", ArgumentSemantic.Copy)]
-		NSDate MinimumDate { get; set; }
-
-		// @property (copy, nonatomic) NSDate * _Nonnull currentMonth;
-		[Export ("currentMonth", ArgumentSemantic.Copy)]
+		// @property (copy, nonatomic) NSDate * currentMonth;
+		[Export("currentMonth", ArgumentSemantic.Copy)]
 		NSDate CurrentMonth { get; set; }
 
 		// @property (assign, nonatomic) MDCalendarTheme theme;
-		[Export ("theme", ArgumentSemantic.Assign)]
+		[Export("theme", ArgumentSemantic.UnsafeUnretained)]
 		MDCalendarTheme Theme { get; set; }
 
 		// @property (assign, nonatomic) NSUInteger firstWeekday;
-		[Export ("firstWeekday")]
+		[Export("firstWeekday", ArgumentSemantic.UnsafeUnretained)]
 		nuint FirstWeekday { get; set; }
 
-		// @property (nonatomic, strong) NSMutableDictionary * _Nonnull backgroundColors;
-		[Export ("backgroundColors", ArgumentSemantic.Strong)]
+		// @property (nonatomic, strong) NSMutableDictionary * backgroundColors;
+		[Export("backgroundColors", ArgumentSemantic.Retain)]
 		NSMutableDictionary BackgroundColors { get; set; }
 
-		// @property (nonatomic, strong) NSMutableDictionary * _Nonnull titleColors;
-		[Export ("titleColors", ArgumentSemantic.Strong)]
+		// @property (nonatomic, strong) NSMutableDictionary * titleColors;
+		[Export("titleColors", ArgumentSemantic.Retain)]
 		NSMutableDictionary TitleColors { get; set; }
 
 		// -(void)reloadData;
-		[Export ("reloadData")]
-		void ReloadData ();
-	}
-
-	// @interface MDCalendarCell : UICollectionViewCell
-	[BaseType (typeof(UICollectionViewCell))]
-	interface MDCalendarCell
-	{
-		// @property (nonatomic, weak) NSDictionary<NSNumber *,UIColor *> * _Nullable titleColors;
-		[NullAllowed, Export ("titleColors", ArgumentSemantic.Weak)]
-		NSDictionary<NSNumber, UIColor> TitleColors { get; set; }
-
-		// @property (nonatomic, weak) NSDictionary<NSNumber *,UIColor *> * _Nullable backgroundColors;
-		[NullAllowed, Export ("backgroundColors", ArgumentSemantic.Weak)]
-		NSDictionary<NSNumber, UIColor> BackgroundColors { get; set; }
-
-		// @property (copy, nonatomic) NSDate * _Nonnull date;
-		[Export ("date", ArgumentSemantic.Copy)]
-		NSDate Date { get; set; }
-
-		// @property (copy, nonatomic) NSDate * _Nonnull month;
-		[Export ("month", ArgumentSemantic.Copy)]
-		NSDate Month { get; set; }
-
-		// @property (nonatomic, weak) NSDate * _Nullable currentDate;
-		[NullAllowed, Export ("currentDate", ArgumentSemantic.Weak)]
-		NSDate CurrentDate { get; set; }
-
-		// @property (nonatomic, weak) UILabel * _Nullable titleLabel;
-		[NullAllowed, Export ("titleLabel", ArgumentSemantic.Weak)]
-		UILabel TitleLabel { get; set; }
-
-		// @property (assign, nonatomic) MDCalendarCellStyle cellStyle;
-		[Export ("cellStyle", ArgumentSemantic.Assign)]
-		MDCalendarCellStyle CellStyle { get; set; }
-
-		// @property (readonly, getter = isPlaceholder) BOOL placeholder;
-		[Export ("placeholder")]
-		bool Placeholder { [Bind ("isPlaceholder")] get; }
-
-		// @property (getter = isShowPlaceholder, assign) BOOL showPlaceholder;
-		[Export ("showPlaceholder")]
-		bool ShowPlaceholder { [Bind ("isShowPlaceholder")] get; set; }
-
-		// -(void)showAnimation;
-		[Export ("showAnimation")]
-		void ShowAnimation ();
-
-		// -(void)hideAnimation;
-		[Export ("hideAnimation")]
-		void HideAnimation ();
-
-		// -(void)configureCell;
-		[Export ("configureCell")]
-		void ConfigureCell ();
+		[Export("reloadData")]
+		void ReloadData();
 	}
 
 	// @interface MDCalendarHeader : UIView
-	[BaseType (typeof(UIView))]
+	[BaseType(typeof(UIView))]
 	interface MDCalendarHeader
 	{
+
 		// @property (assign, nonatomic) CGFloat scrollOffset;
-		[Export ("scrollOffset")]
+		[Export("scrollOffset", ArgumentSemantic.UnsafeUnretained)]
 		nfloat ScrollOffset { get; set; }
 
 		// @property (copy, nonatomic) NSString * dateFormat;
-		[Export ("dateFormat")]
+		[Export("dateFormat")]
 		string DateFormat { get; set; }
 
-		// @property (nonatomic, weak) UIColor * _Nullable titleColor;
-		[NullAllowed, Export ("titleColor", ArgumentSemantic.Weak)]
+		// @property (nonatomic, weak) UIColor * titleColor;
+		[Export("titleColor", ArgumentSemantic.Weak)]
 		UIColor TitleColor { get; set; }
 
-		// @property (nonatomic, weak) UIFont * _Nullable titleFont;
-		[NullAllowed, Export ("titleFont", ArgumentSemantic.Weak)]
+		// @property (nonatomic, weak) UIFont * titleFont;
+		[Export("titleFont", ArgumentSemantic.Weak)]
 		UIFont TitleFont { get; set; }
 
 		// @property (assign, nonatomic) UICollectionViewScrollDirection scrollDirection;
-		[Export ("scrollDirection", ArgumentSemantic.Assign)]
+		[Export("scrollDirection", ArgumentSemantic.UnsafeUnretained)]
 		UICollectionViewScrollDirection ScrollDirection { get; set; }
 
 		// -(void)reloadData;
-		[Export ("reloadData")]
-		void ReloadData ();
-	}
-
-	// @protocol MDCalendarYearSelectorDelegate <NSObject>
-	[Protocol, Model]
-	[BaseType (typeof(NSObject))]
-	interface MDCalendarYearSelectorDelegate
-	{
-		// @required -(void)calendarYearDidSelected:(NSInteger)year;
-		[Abstract]
-		[Export ("calendarYearDidSelected:")]
-		void CalendarYearDidSelected (nint year);
-	}
-
-	// @interface MDCalendarYearSelector : UIView <UITableViewDelegate, UITableViewDataSource>
-	[BaseType (typeof(UIView))]
-	interface MDCalendarYearSelector : IUITableViewDelegate, IUITableViewDataSource
-	{
-		// @property (nonatomic) UITableView * _Nonnull tableView;
-		[Export ("tableView", ArgumentSemantic.Assign)]
-		UITableView TableView { get; set; }
-
-		[Wrap ("WeakDelegate")]
-		[NullAllowed]
-		MDCalendarYearSelectorDelegate Delegate { get; set; }
-
-		// @property (nonatomic, weak) id<MDCalendarYearSelectorDelegate> _Nullable delegate __attribute__((iboutlet));
-		[NullAllowed, Export ("delegate", ArgumentSemantic.Weak)]
-		NSObject WeakDelegate { get; set; }
-
-		// @property (nonatomic) NSDictionary<NSNumber *,UIColor *> * _Nonnull titleColors __attribute__((annotate("ui_appearance_selector")));
-		[Export ("titleColors", ArgumentSemantic.Assign)]
-		NSDictionary<NSNumber, UIColor> TitleColors { get; set; }
-
-		// @property (nonatomic) NSDictionary<NSNumber *,UIColor *> * _Nonnull backgroundColors __attribute__((annotate("ui_appearance_selector")));
-		[Export ("backgroundColors", ArgumentSemantic.Assign)]
-		NSDictionary<NSNumber, UIColor> BackgroundColors { get; set; }
-
-		// @property (copy, nonatomic) NSDate * _Nonnull minimumDate;
-		[Export ("minimumDate", ArgumentSemantic.Copy)]
-		NSDate MinimumDate { get; set; }
-
-		// @property (nonatomic) NSInteger currentYear;
-		[Export ("currentYear")]
-		nint CurrentYear { get; set; }
-
-		// -(instancetype _Nonnull)initWithFrame:(CGRect)frame withMiniminDate:(NSDate * _Nonnull)minDate andMaximumDate:(NSDate * _Nonnull)maxDate;
-		[Export ("initWithFrame:withMiniminDate:andMaximumDate:")]
-		IntPtr Constructor (CGRect frame, NSDate minDate, NSDate maxDate);
-
-		// -(void)relayout;
-		[Export ("relayout")]
-		void Relayout ();
-	}
-
-	// @interface MDCalendarYearSelectorViewCell
-	interface MDCalendarYearSelectorViewCell
-	{
-		// @property (nonatomic) BOOL currentYear;
-		[Export ("currentYear")]
-		bool CurrentYear { get; set; }
-
-		// @property (nonatomic) NSDictionary<NSNumber *,UIColor *> * _Null_unspecified titleColors;
-		[Export ("titleColors", ArgumentSemantic.Assign)]
-		NSDictionary<NSNumber, UIColor> TitleColors { get; set; }
-
-		// @property (nonatomic) NSDictionary<NSNumber *,UIColor *> * _Null_unspecified backgroundColors;
-		[Export ("backgroundColors", ArgumentSemantic.Assign)]
-		NSDictionary<NSNumber, UIColor> BackgroundColors { get; set; }
+		[Export("reloadData")]
+		void ReloadData();
 	}
 
 	// @interface MDDatePicker : UIView
-	[BaseType (typeof(UIView))]
+	[BaseType(typeof(UIView))]
 	interface MDDatePicker
 	{
-		[Wrap ("WeakDelegate")]
-		[NullAllowed]
-		MDCalendarDelegate Delegate { get; set; }
+		// -(instancetype)initWithFrame:(CGRect)frame;
+		[Export("initWithFrame:")]
+		IntPtr Constructor(CGRect frame);
 
-		// @property (nonatomic, weak) id<MDCalendarDelegate> _Nullable delegate __attribute__((iboutlet));
-		[NullAllowed, Export ("delegate", ArgumentSemantic.Weak)]
+		// @property (nonatomic, weak) id<MDCalendarDelegate> delegate;
+		[Export("delegate", ArgumentSemantic.Weak)]
+		[NullAllowed]
 		NSObject WeakDelegate { get; set; }
+
+		// @property (nonatomic, weak) id<MDCalendarDelegate> delegate;
+		[Wrap("WeakDelegate")]
+		MDCalendarDelegate Delegate { get; set; }
 	}
 
 	// @protocol MDDatePickerDialogDelegate <NSObject>
 	[Protocol, Model]
-	[BaseType (typeof(NSObject))]
+	[BaseType(typeof(NSObject))]
 	interface MDDatePickerDialogDelegate
 	{
-		// @required -(void)datePickerDialogDidSelectDate:(NSDate * _Nonnull)date;
+
+		// @required -(void)datePickerDialogDidSelectDate:(NSDate *)date;
+		[Export("datePickerDialogDidSelectDate:")]
 		[Abstract]
-		[Export ("datePickerDialogDidSelectDate:")]
-		void DatePickerDialogDidSelectDate (NSDate date);
+		void DatePickerDialogDidSelectDate(NSDate date);
 	}
 
-	// @interface MDDatePickerDialog : UIControl
-	[BaseType (typeof(UIControl))]
+
+	// @interface MDDatePickerDialog : UIButton
+	[BaseType(typeof(UIButton))]
 	interface MDDatePickerDialog
 	{
-		// @property (nonatomic, strong) NSDate * _Nullable selectedDate;
-		[NullAllowed, Export ("selectedDate", ArgumentSemantic.Strong)]
-		NSDate SelectedDate { get; set; }
 
-		// @property (nonatomic, strong) NSDate * _Nonnull minimumDate;
-		[Export ("minimumDate", ArgumentSemantic.Strong)]
-		NSDate MinimumDate { get; set; }
-
-		[Wrap ("WeakDelegate")]
+		// @property (nonatomic) id<MDDatePickerDialogDelegate> delegate;
+		[Export("delegate")]
 		[NullAllowed]
+		NSObject WeakDelegate { get; set; }
+
+		// @property (nonatomic) id<MDDatePickerDialogDelegate> delegate;
+		[Wrap("WeakDelegate")]
 		MDDatePickerDialogDelegate Delegate { get; set; }
 
-		// @property (nonatomic, weak) id<MDDatePickerDialogDelegate> _Nullable delegate;
-		[NullAllowed, Export ("delegate", ArgumentSemantic.Weak)]
-		NSObject WeakDelegate { get; set; }
-
 		// -(void)show;
-		[Export ("show")]
-		void Show ();
-
-		// -(void)setTitleOk:(NSString * _Nonnull)okTitle andTitleCancel:(NSString * _Nonnull)cancelTitle;
-		[Export ("setTitleOk:andTitleCancel:")]
-		void SetTitleOk (string okTitle, string cancelTitle);
-	}
-
-	// @protocol MDTimePickerDialogDelegate <NSObject>
-	[Protocol, Model]
-	[BaseType (typeof(NSObject))]
-	interface MDTimePickerDialogDelegate
-	{
-		// @required -(void)timePickerDialog:(MDTimePickerDialog * _Nonnull)timePickerDialog didSelectHour:(NSInteger)hour andMinute:(NSInteger)minute;
-		[Abstract]
-		[Export ("timePickerDialog:didSelectHour:andMinute:")]
-		void DidSelectHour (MDTimePickerDialog timePickerDialog, nint hour, nint minute);
-	}
-
-	// @interface MDTimePickerDialog : UIControl
-	[BaseType (typeof(UIControl))]
-	interface MDTimePickerDialog
-	{
-		// @property (nonatomic, strong) UIColor * _Nonnull titleColor;
-		[Export ("titleColor", ArgumentSemantic.Strong)]
-		UIColor TitleColor { get; set; }
-
-		// @property (nonatomic, strong) UIColor * _Nonnull titleSelectedColor;
-		[Export ("titleSelectedColor", ArgumentSemantic.Strong)]
-		UIColor TitleSelectedColor { get; set; }
-
-		// @property (nonatomic, strong) UIColor * _Nonnull headerTextColor;
-		[Export ("headerTextColor", ArgumentSemantic.Strong)]
-		UIColor HeaderTextColor { get; set; }
-
-		// @property (nonatomic, strong) UIColor * _Nonnull headerBackgroundColor;
-		[Export ("headerBackgroundColor", ArgumentSemantic.Strong)]
-		UIColor HeaderBackgroundColor { get; set; }
-
-		// @property (nonatomic, strong) UIColor * _Nonnull selectionColor;
-		[Export ("selectionColor", ArgumentSemantic.Strong)]
-		UIColor SelectionColor { get; set; }
-
-		// @property (nonatomic, strong) UIColor * _Nonnull selectionCenterColor;
-		[Export ("selectionCenterColor", ArgumentSemantic.Strong)]
-		UIColor SelectionCenterColor { get; set; }
-
-		// @property (nonatomic, strong) UIColor * _Nonnull backgroundPopupColor;
-		[Export ("backgroundPopupColor", ArgumentSemantic.Strong)]
-		UIColor BackgroundPopupColor { get; set; }
-
-		// @property (nonatomic, strong) UIColor * _Nonnull backgroundClockColor;
-		[Export ("backgroundClockColor", ArgumentSemantic.Strong)]
-		UIColor BackgroundClockColor { get; set; }
-
-		// @property (nonatomic) MDClockMode clockMode;
-		[Export ("clockMode", ArgumentSemantic.Assign)]
-		MDClockMode ClockMode { get; set; }
-
-		// @property (assign, nonatomic) MDTimePickerTheme theme;
-		[Export ("theme", ArgumentSemantic.Assign)]
-		MDTimePickerTheme Theme { get; set; }
-
-		[Wrap ("WeakDelegate")]
-		[NullAllowed]
-		MDTimePickerDialogDelegate Delegate { get; set; }
-
-		// @property (nonatomic, weak) id<MDTimePickerDialogDelegate> _Nullable delegate;
-		[NullAllowed, Export ("delegate", ArgumentSemantic.Weak)]
-		NSObject WeakDelegate { get; set; }
-
-		// -(instancetype _Nonnull)initWithHour:(NSInteger)hour minute:(NSInteger)minute;
-		[Export ("initWithHour:minute:")]
-		IntPtr Constructor (nint hour, nint minute);
-
-		// -(instancetype _Nonnull)initWithClockMode:(MDClockMode)clockMode;
-		[Export ("initWithClockMode:")]
-		IntPtr Constructor (MDClockMode clockMode);
-
-		// -(instancetype _Nonnull)initWithHour:(NSInteger)hour minute:(NSInteger)minute clockMode:(MDClockMode)clockMode;
-		[Export ("initWithHour:minute:clockMode:")]
-		IntPtr Constructor (nint hour, nint minute, MDClockMode clockMode);
-
-		// -(void)show;
-		[Export ("show")]
-		void Show ();
-
-		// -(void)setTitleOk:(NSString * _Nonnull)okTitle andTitleCancel:(NSString * _Nonnull)cancelTitle;
-		[Export ("setTitleOk:andTitleCancel:")]
-		void SetTitleOk (string okTitle, string cancelTitle);
-	}
-
-	// @interface NSCalendarHelper : NSObject
-	[BaseType (typeof(NSObject))]
-	interface NSCalendarHelper
-	{
-		// +(NSCalendar * _Nonnull)mdSharedCalendar;
-		[Static]
-		[Export ("mdSharedCalendar")]
-		[Verify (MethodToProperty)]
-		NSCalendar MdSharedCalendar { get; }
-	}
-
-	// @interface MDExtension (NSDate)
-	[Category]
-	[BaseType (typeof(NSDate))]
-	interface NSDate_MDExtension
-	{
-		// @property (readonly, nonatomic) NSInteger mdYear;
-		[Export ("mdYear")]
-		nint MdYear { get; }
-
-		// @property (readonly, nonatomic) NSInteger mdMonth;
-		[Export ("mdMonth")]
-		nint MdMonth { get; }
-
-		// @property (readonly, nonatomic) NSInteger mdDay;
-		[Export ("mdDay")]
-		nint MdDay { get; }
-
-		// @property (readonly, nonatomic) NSInteger mdWeekday;
-		[Export ("mdWeekday")]
-		nint MdWeekday { get; }
-
-		// @property (readonly, nonatomic) NSInteger mdHour;
-		[Export ("mdHour")]
-		nint MdHour { get; }
-
-		// @property (readonly, nonatomic) NSInteger mdMinute;
-		[Export ("mdMinute")]
-		nint MdMinute { get; }
-
-		// @property (readonly, nonatomic) NSInteger mdSecond;
-		[Export ("mdSecond")]
-		nint MdSecond { get; }
-
-		// @property (readonly, nonatomic) NSInteger mdNumberOfDaysInMonth;
-		[Export ("mdNumberOfDaysInMonth")]
-		nint MdNumberOfDaysInMonth { get; }
-
-		// -(NSDate * _Nullable)mdDateByAddingMonths:(NSInteger)months;
-		[Export ("mdDateByAddingMonths:")]
-		[return: NullAllowed]
-		NSDate MdDateByAddingMonths (nint months);
-
-		// -(NSDate * _Nullable)mdDateBySubtractingMonths:(NSInteger)months;
-		[Export ("mdDateBySubtractingMonths:")]
-		[return: NullAllowed]
-		NSDate MdDateBySubtractingMonths (nint months);
-
-		// -(NSDate * _Nullable)mdDateByAddingDays:(NSInteger)days;
-		[Export ("mdDateByAddingDays:")]
-		[return: NullAllowed]
-		NSDate MdDateByAddingDays (nint days);
-
-		// -(NSDate * _Nullable)mdDateBySubtractingDays:(NSInteger)days;
-		[Export ("mdDateBySubtractingDays:")]
-		[return: NullAllowed]
-		NSDate MdDateBySubtractingDays (nint days);
-
-		// -(NSString * _Nonnull)mdStringWithFormat:(NSString * _Nonnull)format;
-		[Export ("mdStringWithFormat:")]
-		string MdStringWithFormat (string format);
-
-		// -(NSInteger)mdYearsFrom:(NSDate * _Nonnull)date;
-		[Export ("mdYearsFrom:")]
-		nint MdYearsFrom (NSDate date);
-
-		// -(NSInteger)mdMonthsFrom:(NSDate * _Nonnull)date;
-		[Export ("mdMonthsFrom:")]
-		nint MdMonthsFrom (NSDate date);
-
-		// -(NSInteger)mdDaysFrom:(NSDate * _Nonnull)date;
-		[Export ("mdDaysFrom:")]
-		nint MdDaysFrom (NSDate date);
-
-		// -(BOOL)mdIsEqualToDateForMonth:(NSDate * _Nonnull)date;
-		[Export ("mdIsEqualToDateForMonth:")]
-		bool MdIsEqualToDateForMonth (NSDate date);
-
-		// -(BOOL)mdIsEqualToDateForDay:(NSDate * _Nonnull)date;
-		[Export ("mdIsEqualToDateForDay:")]
-		bool MdIsEqualToDateForDay (NSDate date);
-	}
-
-	// @interface MDDeviceHelper : NSObject
-	[BaseType (typeof(NSObject))]
-	interface MDDeviceHelper
-	{
-		// +(UIView * _Nullable)getMainView;
-		[Static]
-		[NullAllowed, Export ("getMainView")]
-		[Verify (MethodToProperty)]
-		UIView MainView { get; }
-	}
-
-	// @interface MDMathHelper : NSObject
-	[BaseType (typeof(NSObject))]
-	interface MDMathHelper
-	{
-		// +(CGFloat)distanceBetweenPoint:(CGPoint)p1 andPoint:(CGPoint)p2;
-		[Static]
-		[Export ("distanceBetweenPoint:andPoint:")]
-		nfloat DistanceBetweenPoint (CGPoint p1, CGPoint p2);
-
-		// +(NSArray<NSValue *> * _Nonnull)findIntersectionsBetweenCircleCenter:(CGPoint)c1 radius:(CGFloat)r1 andCircleCenter:(CGPoint)c2 radius:(CGFloat)r2;
-		[Static]
-		[Export ("findIntersectionsBetweenCircleCenter:radius:andCircleCenter:radius:")]
-		NSValue[] FindIntersectionsBetweenCircleCenter (CGPoint c1, nfloat r1, CGPoint c2, nfloat r2);
-
-		// +(NSArray<NSValue *> * _Nonnull)findTangentsWithCircle:(CGPoint)c radius:(CGFloat)r1 fromPoint:(CGPoint)p;
-		[Static]
-		[Export ("findTangentsWithCircle:radius:fromPoint:")]
-		NSValue[] FindTangentsWithCircle (CGPoint c, nfloat r1, CGPoint p);
-	}
-
-	// @interface NSDateHelper : NSObject
-	[BaseType (typeof(NSObject))]
-	interface NSDateHelper
-	{
-		// +(NSDate * _Nullable)mdDateFromString:(NSString * _Nonnull)string format:(NSString * _Nonnull)format;
-		[Static]
-		[Export ("mdDateFromString:format:")]
-		[return: NullAllowed]
-		NSDate MdDateFromString (string @string, string format);
-
-		// +(NSDate * _Nullable)mdDateWithYear:(NSInteger)year month:(NSInteger)month day:(NSInteger)day;
-		[Static]
-		[Export ("mdDateWithYear:month:day:")]
-		[return: NullAllowed]
-		NSDate MdDateWithYear (nint year, nint month, nint day);
-
-		// +(BOOL)prefers24Hour;
-		[Static]
-		[Export ("prefers24Hour")]
-		[Verify (MethodToProperty)]
-		bool Prefers24Hour { get; }
-	}
-
-	// @interface UIColorHelper : NSObject
-	[BaseType (typeof(NSObject))]
-	interface UIColorHelper
-	{
-		// +(UIColor * _Nonnull)colorWithRGBA:(NSString * _Nonnull)rgba;
-		[Static]
-		[Export ("colorWithRGBA:")]
-		UIColor ColorWithRGBA (string rgba);
-
-		// +(UIColor * _Nonnull)colorFromRGB:(NSString * _Nonnull)rgb withAlpha:(float)alpha;
-		[Static]
-		[Export ("colorFromRGB:withAlpha:")]
-		UIColor ColorFromRGB (string rgb, float alpha);
-	}
-
-	// @interface UIFontHelper : NSObject
-	[BaseType (typeof(NSObject))]
-	interface UIFontHelper
-	{
-		// +(UIFont * _Nullable)robotoFontWithName:(NSString * _Nullable)fontName size:(CGFloat)fontSize;
-		[Static]
-		[Export ("robotoFontWithName:size:")]
-		[return: NullAllowed]
-		UIFont RobotoFontWithName ([NullAllowed] string fontName, nfloat fontSize);
-
-		// +(UIFont * _Nullable)robotoFontOfSize:(CGFloat)fontSize;
-		[Static]
-		[Export ("robotoFontOfSize:")]
-		[return: NullAllowed]
-		UIFont RobotoFontOfSize (nfloat fontSize);
-
-		// +(UIFont * _Nullable)boldRobotoFontOfSize:(CGFloat)fontSize;
-		[Static]
-		[Export ("boldRobotoFontOfSize:")]
-		[return: NullAllowed]
-		UIFont BoldRobotoFontOfSize (nfloat fontSize);
-	}
-
-	// @interface UIViewHelper : NSObject
-	[BaseType (typeof(NSObject))]
-	interface UIViewHelper
-	{
-		// +(NSLayoutConstraint * _Nonnull)addConstraintWithItem:(id _Nonnull)view1 attribute:(NSLayoutAttribute)attr1 relatedBy:(NSLayoutRelation)relation toItem:(id _Nullable)view2 attribute:(NSLayoutAttribute)attr2 multiplier:(CGFloat)multiplier constant:(CGFloat)c toView:(UIView * _Nonnull)view;
-		[Static]
-		[Export ("addConstraintWithItem:attribute:relatedBy:toItem:attribute:multiplier:constant:toView:")]
-		NSLayoutConstraint AddConstraintWithItem (NSObject view1, NSLayoutAttribute attr1, NSLayoutRelation relation, [NullAllowed] NSObject view2, NSLayoutAttribute attr2, nfloat multiplier, nfloat c, UIView view);
-
-		// +(NSLayoutConstraint * _Nonnull)addConstraintWithItem:(id _Nonnull)view1 attribute:(NSLayoutAttribute)attr1 relatedBy:(NSLayoutRelation)relation toItem:(id _Nullable)view2 attribute:(NSLayoutAttribute)attr2 multiplier:(CGFloat)multiplier constant:(CGFloat)c priority:(UILayoutPriority)priority toView:(UIView * _Nonnull)view;
-		[Static]
-		[Export ("addConstraintWithItem:attribute:relatedBy:toItem:attribute:multiplier:constant:priority:toView:")]
-		NSLayoutConstraint AddConstraintWithItem (NSObject view1, NSLayoutAttribute attr1, NSLayoutRelation relation, [NullAllowed] NSObject view2, NSLayoutAttribute attr2, nfloat multiplier, nfloat c, float priority, UIView view);
-
-		// +(NSArray<NSLayoutConstraint *> * _Nonnull)addConstraintsWithVisualFormat:(NSString * _Nonnull)format options:(NSLayoutFormatOptions)opts metrics:(NSDictionary<NSString *,id> * _Nullable)metrics views:(NSDictionary<NSString *,id> * _Nonnull)views toView:(UIView * _Nonnull)view;
-		[Static]
-		[Export ("addConstraintsWithVisualFormat:options:metrics:views:toView:")]
-		NSLayoutConstraint[] AddConstraintsWithVisualFormat (string format, NSLayoutFormatOptions opts, [NullAllowed] NSDictionary<NSString, NSObject> metrics, NSDictionary<NSString, NSObject> views, UIView view);
-	}
-
-	// @protocol MDButtonDelegate <NSObject>
-	[Protocol, Model]
-	[BaseType (typeof(NSObject))]
-	interface MDButtonDelegate
-	{
-		// @optional -(void)rotationStarted:(id _Nonnull)sender;
-		[Export ("rotationStarted:")]
-		void RotationStarted (NSObject sender);
-
-		// @optional -(void)rotationCompleted:(id _Nonnull)sender;
-		[Export ("rotationCompleted:")]
-		void RotationCompleted (NSObject sender);
-	}
-
-	// @interface MDButton : UIButton
-	[BaseType (typeof(UIButton))]
-	interface MDButton
-	{
-		// @property (nonatomic) UIColor * _Null_unspecified rippleColor;
-		[Export ("rippleColor", ArgumentSemantic.Assign)]
-		UIColor RippleColor { get; set; }
-
-		// @property (nonatomic) NSInteger type;
-		[Export ("type")]
-		nint Type { get; set; }
-
-		// @property (getter = isEnabled, nonatomic) BOOL enabled;
-		[Export ("enabled")]
-		bool Enabled { [Bind ("isEnabled")] get; set; }
-
-		// @property (nonatomic) UIImage * _Nonnull imageNormal;
-		[Export ("imageNormal", ArgumentSemantic.Assign)]
-		UIImage ImageNormal { get; set; }
-
-		// @property (nonatomic) UIImage * _Nonnull imageRotated;
-		[Export ("imageRotated", ArgumentSemantic.Assign)]
-		UIImage ImageRotated { get; set; }
-
-		// @property (nonatomic) CGFloat imageSize;
-		[Export ("imageSize")]
-		nfloat ImageSize { get; set; }
-
-		// @property (nonatomic) MDButtonType mdButtonType;
-		[Export ("mdButtonType", ArgumentSemantic.Assign)]
-		MDButtonType MdButtonType { get; set; }
-
-		// @property (getter = isRotated, nonatomic) BOOL rotated;
-		[Export ("rotated")]
-		bool Rotated { [Bind ("isRotated")] get; set; }
-
-		[Wrap ("WeakMdButtonDelegate")]
-		[NullAllowed]
-		MDButtonDelegate MdButtonDelegate { get; set; }
-
-		// @property (nonatomic, weak) id<MDButtonDelegate> _Nullable mdButtonDelegate;
-		[NullAllowed, Export ("mdButtonDelegate", ArgumentSemantic.Weak)]
-		NSObject WeakMdButtonDelegate { get; set; }
-
-		// -(instancetype _Nonnull)initWithFrame:(CGRect)frame type:(MDButtonType)buttonType rippleColor:(UIColor * _Nullable)rippleColor;
-		[Export ("initWithFrame:type:rippleColor:")]
-		IntPtr Constructor (CGRect frame, MDButtonType buttonType, [NullAllowed] UIColor rippleColor);
+		[Export("show")]
+		void Show();
 	}
 
 	// @interface MDCollectionViewCell : UICollectionViewCell
-	[BaseType (typeof(UICollectionViewCell))]
+	[BaseType(typeof(UICollectionViewCell))]
 	interface MDCollectionViewCell
 	{
+
 		// @property (nonatomic) UIColor * rippleColor;
-		[Export ("rippleColor", ArgumentSemantic.Assign)]
+		[Export("rippleColor")]
 		UIColor RippleColor { get; set; }
 	}
 
+	// @interface MDDeviceHelper : NSObject
+	[BaseType(typeof(NSObject))]
+	interface MDDeviceHelper
+	{
+
+		// +(UIView *)getMainView;
+		[Static, Export("getMainView")]
+		UIView GetMainView();
+	}
+
+	// @interface MDMathHelper : NSObject
+	[BaseType(typeof(NSObject))]
+	interface MDMathHelper
+	{
+
+		// +(float)distanceBetweenPoint:(CGPoint)p1 andPoint:(CGPoint)p2;
+		[Static, Export("distanceBetweenPoint:andPoint:")]
+		float DistanceBetweenPoint(CGPoint p1, CGPoint p2);
+
+		// +(NSArray *)findIntersectionsBetweenCircleCenter:(CGPoint)c1 radius:(float)r1 andCircleCenter:(CGPoint)c2 radius:(float)r2;
+		[Static, Export("findIntersectionsBetweenCircleCenter:radius:andCircleCenter:radius:")]
+		NSObject[] FindIntersectionsBetweenCircleCenter(CGPoint c1, float r1, CGPoint c2, float r2);
+
+		// +(NSArray *)findTangentsWithCircle:(CGPoint)c radius:(float)r1 fromPoint:(CGPoint)p;
+		[Static, Export("findTangentsWithCircle:radius:fromPoint:")]
+		NSObject[] FindTangentsWithCircle(CGPoint c, float r1, CGPoint p);
+	}
+
 	// @interface MDProgress : UIView
-	[BaseType (typeof(UIView))]
+	[BaseType(typeof(UIView))]
 	interface MDProgress
 	{
+
 		// @property (nonatomic) UIColor * progressColor;
-		[Export ("progressColor", ArgumentSemantic.Assign)]
+		[Export("progressColor")]
 		UIColor ProgressColor { get; set; }
 
 		// @property (nonatomic) UIColor * trackColor;
-		[Export ("trackColor", ArgumentSemantic.Assign)]
+		[Export("trackColor")]
 		UIColor TrackColor { get; set; }
 
-		// @property (nonatomic) MDProgressType progressType;
-		[Export ("progressType", ArgumentSemantic.Assign)]
+		// @property (nonatomic) enum MDProgressType progressType;
+		[Export("progressType")]
 		MDProgressType ProgressType { get; set; }
 
-		// @property (nonatomic) MDProgressStyle progressStyle;
-		[Export ("progressStyle", ArgumentSemantic.Assign)]
+		// @property (nonatomic) enum MDProgressStyle progressStyle;
+		[Export("progressStyle")]
 		MDProgressStyle ProgressStyle { get; set; }
 
-		// @property (nonatomic) NSInteger type;
-		[Export ("type")]
-		nint Type { get; set; }
+		// @property (nonatomic) int type;
+		[Export("type")]
+		int Type { get; set; }
 
-		// @property (nonatomic) NSInteger style;
-		[Export ("style")]
-		nint Style { get; set; }
+		// @property (nonatomic) int style;
+		[Export("style")]
+		int Style { get; set; }
 
-		// @property (nonatomic) CGFloat trackWidth;
-		[Export ("trackWidth")]
-		nfloat TrackWidth { get; set; }
-
-		// @property (nonatomic) CGFloat circularSize;
-		[Export ("circularSize")]
-		nfloat CircularSize { get; set; }
-
-		// @property (nonatomic) CGFloat progress;
-		[Export ("progress")]
-		nfloat Progress { get; set; }
+		// @property (nonatomic) float progress;
+		[Export("progress")]
+		float Progress { get; set; }
 
 		// @property (nonatomic) BOOL enableTrackColor;
-		[Export ("enableTrackColor")]
+		[Export("enableTrackColor")]
 		bool EnableTrackColor { get; set; }
 	}
 
 	// @interface MDRippleLayer : CALayer
-	[BaseType (typeof(CALayer))]
+	[BaseType(typeof(CALayer))]
 	interface MDRippleLayer
 	{
+
+		// -(instancetype)initWithSuperLayer:(CALayer *)superLayer;
+		[Export("initWithSuperLayer:")]
+		IntPtr Constructor(CALayer superLayer);
+
+		// -(instancetype)initWithSuperView:(UIView *)superView;
+		[Export("initWithSuperView:")]
+		IntPtr Constructor(UIView superView);
+
 		// @property (nonatomic) BOOL enableRipple;
-		[Export ("enableRipple")]
+		[Export("enableRipple")]
 		bool EnableRipple { get; set; }
 
 		// @property (nonatomic) BOOL enableElevation;
-		[Export ("enableElevation")]
+		[Export("enableElevation")]
 		bool EnableElevation { get; set; }
 
 		// @property (nonatomic) BOOL enableMask;
-		[Export ("enableMask")]
+		[Export("enableMask")]
 		bool EnableMask { get; set; }
 
 		// @property (nonatomic) CGFloat restingElevation;
-		[Export ("restingElevation")]
+		[Export("restingElevation")]
 		nfloat RestingElevation { get; set; }
 
-		// @property (nonatomic) CGFloat rippleScaleRatio;
-		[Export ("rippleScaleRatio")]
-		nfloat RippleScaleRatio { get; set; }
+		// @property (nonatomic) float rippleScaleRatio;
+		[Export("rippleScaleRatio")]
+		float RippleScaleRatio { get; set; }
 
-		// @property (nonatomic) CGFloat effectSpeed;
-		[Export ("effectSpeed")]
-		nfloat EffectSpeed { get; set; }
+		// @property (nonatomic) float effectSpeed;
+		[Export("effectSpeed")]
+		float EffectSpeed { get; set; }
 
-		// @property (nonatomic) UIColor * _Null_unspecified effectColor;
-		[Export ("effectColor", ArgumentSemantic.Assign)]
+		// @property (nonatomic) UIColor * effectColor;
+		[Export("effectColor")]
 		UIColor EffectColor { get; set; }
 
-		// -(instancetype _Nonnull)initWithSuperLayer:(CALayer * _Nonnull)superLayer;
-		[Export ("initWithSuperLayer:")]
-		IntPtr Constructor (CALayer superLayer);
-
-		// -(instancetype _Nonnull)initWithSuperView:(UIView * _Nonnull)superView;
-		[Export ("initWithSuperView:")]
-		IntPtr Constructor (UIView superView);
-
-		// -(void)setEffectColor:(UIColor * _Nonnull)color withRippleAlpha:(CGFloat)rippleAlpha backgroundAlpha:(CGFloat)backgroundAlpha;
-		[Export ("setEffectColor:withRippleAlpha:backgroundAlpha:")]
-		void SetEffectColor (UIColor color, nfloat rippleAlpha, nfloat backgroundAlpha);
+		// -(void)setEffectColor:(UIColor *)color withRippleAlpha:(float)rippleAlpha backgroundAlpha:(float)backgroundAlpha;
+		[Export("setEffectColor:withRippleAlpha:backgroundAlpha:")]
+		void SetEffectColor(UIColor color, float rippleAlpha, float backgroundAlpha);
 
 		// -(void)startEffectsAtLocation:(CGPoint)touchLocation;
-		[Export ("startEffectsAtLocation:")]
-		void StartEffectsAtLocation (CGPoint touchLocation);
-
-		// -(void)stopEffectsImmediately;
-		[Export ("stopEffectsImmediately")]
-		void StopEffectsImmediately ();
+		[Export("startEffectsAtLocation:")]
+		void StartEffectsAtLocation(CGPoint touchLocation);
 
 		// -(void)stopEffects;
-		[Export ("stopEffects")]
-		void StopEffects ();
+		[Export("stopEffects")]
+		void StopEffects();
 	}
 
 	// @protocol MDLayerDelegate <NSObject>
 	[Protocol, Model]
-	[BaseType (typeof(NSObject))]
+	[BaseType(typeof(NSObject))]
 	interface MDLayerDelegate
 	{
-		// @optional -(void)mdLayer:(MDRippleLayer * _Nonnull)layer didFinishEffect:(CFTimeInterval)duration;
-		[Export ("mdLayer:didFinishEffect:")]
-		void DidFinishEffect (MDRippleLayer layer, double duration);
+
+		// @optional -(void)mdLayer:(MDRippleLayer *)layer didFinishEffect:(CFTimeInterval)duration;
+		[Export("mdLayer:didFinishEffect:")]
+		void DidFinishEffect(MDRippleLayer layer, double duration);
 	}
 
 	// @interface MDSlider : UIControl
-	[BaseType (typeof(UIControl))]
+	[BaseType(typeof(UIControl))]
 	interface MDSlider
 	{
-		// @property (nonatomic) CGFloat value;
-		[Export ("value")]
-		nfloat Value { get; set; }
 
-		// @property (nonatomic) CGFloat maximumValue;
-		[Export ("maximumValue")]
-		nfloat MaximumValue { get; set; }
+		// @property (nonatomic) float value;
+		[Export("value")]
+		float Value { get; set; }
 
-		// @property (nonatomic) CGFloat minimumValue;
-		[Export ("minimumValue")]
-		nfloat MinimumValue { get; set; }
+		// @property (nonatomic) float maximumValue;
+		[Export("maximumValue")]
+		float MaximumValue { get; set; }
 
-		// @property (nonatomic) UIColor * _Nonnull thumbOnColor;
-		[Export ("thumbOnColor", ArgumentSemantic.Assign)]
+		// @property (nonatomic) float minimumValue;
+		[Export("minimumValue")]
+		float MinimumValue { get; set; }
+
+		// @property (nonatomic) UIColor * thumbOnColor;
+		[Export("thumbOnColor")]
 		UIColor ThumbOnColor { get; set; }
 
-		// @property (nonatomic) UIColor * _Nonnull trackOnColor;
-		[Export ("trackOnColor", ArgumentSemantic.Assign)]
+		// @property (nonatomic) UIColor * trackOnColor;
+		[Export("trackOnColor")]
 		UIColor TrackOnColor { get; set; }
 
-		// @property (nonatomic) UIColor * _Nonnull thumbOffColor;
-		[Export ("thumbOffColor", ArgumentSemantic.Assign)]
+		// @property (nonatomic) UIColor * thumbOffColor;
+		[Export("thumbOffColor")]
 		UIColor ThumbOffColor { get; set; }
 
-		// @property (nonatomic) UIColor * _Nonnull trackOffColor;
-		[Export ("trackOffColor", ArgumentSemantic.Assign)]
+		// @property (nonatomic) UIColor * trackOffColor;
+		[Export("trackOffColor")]
 		UIColor TrackOffColor { get; set; }
 
-		// @property (nonatomic) UIColor * _Nonnull disabledColor;
-		[Export ("disabledColor", ArgumentSemantic.Assign)]
+		// @property (nonatomic) UIColor * disabledColor;
+		[Export("disabledColor")]
 		UIColor DisabledColor { get; set; }
 
-		// @property (nonatomic) UIColor * _Nullable tickMarksColor;
-		[NullAllowed, Export ("tickMarksColor", ArgumentSemantic.Assign)]
+		// @property (nonatomic) UIColor * tickMarksColor;
+		[Export("tickMarksColor")]
 		UIColor TickMarksColor { get; set; }
 
-		// @property (nonatomic) UIImage * _Nullable leftImage;
-		[NullAllowed, Export ("leftImage", ArgumentSemantic.Assign)]
+		// @property (nonatomic) UIImage * leftImage;
+		[Export("leftImage")]
 		UIImage LeftImage { get; set; }
 
-		// @property (nonatomic) UIImage * _Nullable rightImage;
-		[NullAllowed, Export ("rightImage", ArgumentSemantic.Assign)]
+		// @property (nonatomic) UIImage * rightImage;
+		[Export("rightImage")]
 		UIImage RightImage { get; set; }
 
-		// @property (getter = isEnabled, nonatomic) BOOL enabled;
-		[Export ("enabled")]
-		bool Enabled { [Bind ("isEnabled")] get; set; }
+		// @property (nonatomic, getter = isEnabled) BOOL enabled;
+		[Export("enabled")]
+		bool Enabled { [Bind("isEnabled")] get; set; }
 
-		// @property (nonatomic) CGFloat step;
-		[Export ("step")]
-		nfloat Step { get; set; }
+		// @property (nonatomic) float step;
+		[Export("step")]
+		float Step { get; set; }
 
 		// @property (nonatomic) BOOL enabledValueLabel;
-		[Export ("enabledValueLabel")]
+		[Export("enabledValueLabel")]
 		bool EnabledValueLabel { get; set; }
 
 		// @property (nonatomic) NSUInteger precision;
-		[Export ("precision")]
+		[Export("precision")]
 		nuint Precision { get; set; }
 	}
 
 	// @protocol MDSnackbarDelegate <NSObject>
 	[Protocol, Model]
-	[BaseType (typeof(NSObject))]
+	[BaseType(typeof(NSObject))]
 	interface MDSnackbarDelegate
 	{
-		// @optional -(void)snackbarWillAppear:(MDSnackbar * _Nonnull)snackbar;
-		[Export ("snackbarWillAppear:")]
-		void SnackbarWillAppear (MDSnackbar snackbar);
 
-		// @optional -(void)snackbarDidAppear:(MDSnackbar * _Nonnull)snackbar;
-		[Export ("snackbarDidAppear:")]
-		void SnackbarDidAppear (MDSnackbar snackbar);
+		// @optional -(void)snackbarWillAppear:(MDSnackbar *)snackbar;
+		[Export("snackbarWillAppear:")]
+		void SnackbarWillAppear(MDSnackbar snackbar);
 
-		// @optional -(void)snackbarWillDisappear:(MDSnackbar * _Nonnull)snackbar;
-		[Export ("snackbarWillDisappear:")]
-		void SnackbarWillDisappear (MDSnackbar snackbar);
+		// @optional -(void)snackbarDidAppear:(MDSnackbar *)snackbar;
+		[Export("snackbarDidAppear:")]
+		void SnackbarDidAppear(MDSnackbar snackbar);
 
-		// @optional -(void)snackbarDidDisappear:(MDSnackbar * _Nonnull)snackbar;
-		[Export ("snackbarDidDisappear:")]
-		void SnackbarDidDisappear (MDSnackbar snackbar);
+		// @optional -(void)snackbarWillDisappear:(MDSnackbar *)snackbar;
+		[Export("snackbarWillDisappear:")]
+		void SnackbarWillDisappear(MDSnackbar snackbar);
 
-		// @optional -(void)actionTouched:(MDSnackbar * _Nonnull)snackbar;
-		[Export ("actionTouched:")]
-		void ActionTouched (MDSnackbar snackbar);
+		// @optional -(void)snackbarDidDisappear:(MDSnackbar *)snackbar;
+		[Export("snackbarDidDisappear:")]
+		void SnackbarDidDisappear(MDSnackbar snackbar);
+
+		// @optional -(void)actionTouched:(MDSnackbar *)snackbar;
+		[Export("actionTouched:")]
+		void ActionTouched(MDSnackbar snackbar);
 	}
 
 	// @interface MDSnackbar : UIControl
-	[BaseType (typeof(UIControl))]
+	[BaseType(typeof(UIControl))]
 	interface MDSnackbar
 	{
-		// @property (nonatomic) NSString * _Nonnull text;
-		[Export ("text")]
+
+		// -(instancetype)initWithText:(NSString *)text actionTitle:(NSString *)action;
+		[Export("initWithText:actionTitle:")]
+		IntPtr Constructor(string text, string action);
+
+		// -(instancetype)initWithText:(NSString *)text actionTitle:(NSString *)action duration:(double)duration;
+		[Export("initWithText:actionTitle:duration:")]
+		IntPtr Constructor(string text, string action, double duration);
+
+		// @property (nonatomic) NSString * text;
+		[Export("text")]
 		string Text { get; set; }
 
-		// @property (nonatomic) NSString * _Nonnull actionTitle;
-		[Export ("actionTitle")]
+		// @property (nonatomic) NSString * actionTitle;
+		[Export("actionTitle")]
 		string ActionTitle { get; set; }
 
-		// @property (nonatomic) UIColor * _Nonnull textColor;
-		[Export ("textColor", ArgumentSemantic.Assign)]
+		// @property (nonatomic) UIColor * textColor;
+		[Export("textColor")]
 		UIColor TextColor { get; set; }
 
-		// @property (nonatomic) UIColor * _Nonnull actionTitleColor;
-		[Export ("actionTitleColor", ArgumentSemantic.Assign)]
+		// @property (nonatomic) UIColor * actionTitleColor;
+		[Export("actionTitleColor")]
 		UIColor ActionTitleColor { get; set; }
 
 		// @property (nonatomic) double duration;
-		[Export ("duration")]
+		[Export("duration")]
 		double Duration { get; set; }
 
-		// @property (nonatomic) double bottomPadding;
-		[Export ("bottomPadding")]
-		double BottomPadding { get; set; }
-
 		// @property (nonatomic) BOOL swipeable;
-		[Export ("swipeable")]
+		[Export("swipeable")]
 		bool Swipeable { get; set; }
 
 		// @property (nonatomic) BOOL multiline;
-		[Export ("multiline")]
+		[Export("multiline")]
 		bool Multiline { get; set; }
 
 		// @property (readonly, nonatomic) BOOL isShowing;
-		[Export ("isShowing")]
+		[Export("isShowing")]
 		bool IsShowing { get; }
 
-		// -(instancetype _Nonnull)initWithText:(NSString * _Nonnull)text actionTitle:(NSString * _Nonnull)action;
-		[Export ("initWithText:actionTitle:")]
-		IntPtr Constructor (string text, string action);
-
-		// -(instancetype _Nonnull)initWithText:(NSString * _Nonnull)text actionTitle:(NSString * _Nonnull)action duration:(double)duration;
-		[Export ("initWithText:actionTitle:duration:")]
-		IntPtr Constructor (string text, string action, double duration);
-
 		// -(void)show;
-		[Export ("show")]
-		void Show ();
+		[Export("show")]
+		void Show();
 
 		// -(void)dismiss;
-		[Export ("dismiss")]
-		void Dismiss ();
+		[Export("dismiss")]
+		void Dismiss();
 
-		// -(void)addTarget:(id _Nonnull)target action:(SEL _Nonnull)aSelector;
-		[Export ("addTarget:action:")]
-		void AddTarget (NSObject target, Selector aSelector);
+		// -(void)addTarget:(id)target action:(SEL)aSelector;
+		[Export("addTarget:action:")]
+		void AddTarget(NSObject target, Selector aSelector);
 
-		// -(void)addDelegate:(id<MDSnackbarDelegate> _Nonnull)delegate;
-		[Export ("addDelegate:")]
-		void AddDelegate (MDSnackbarDelegate @delegate);
+		// -(void)addDelegate:(id<MDSnackbarDelegate>)delegate;
+		[Export("addDelegate:")]
+		void AddDelegate(MDSnackbarDelegate Delegate);
 
-		// -(void)removeDelegate:(id<MDSnackbarDelegate> _Nonnull)delegate;
-		[Export ("removeDelegate:")]
-		void RemoveDelegate (MDSnackbarDelegate @delegate);
+		// -(void)removeDelegate:(id<MDSnackbarDelegate>)delegate;
+		[Export("removeDelegate:")]
+		void RemoveDelegate(MDSnackbarDelegate Delegate);
 	}
 
 	// @interface MDSwitch : UIControl
-	[BaseType (typeof(UIControl))]
+	[BaseType(typeof(UIControl))]
 	interface MDSwitch
 	{
-		// @property (getter = isOn, nonatomic) BOOL on;
-		[Export ("on")]
-		bool On { [Bind ("isOn")] get; set; }
+
+		// @property (nonatomic, getter = isOn) BOOL on;
+		[Export("on")]
+		bool On { [Bind("isOn")] get; set; }
 
 		// @property (nonatomic) UIColor * thumbOn;
-		[Export ("thumbOn", ArgumentSemantic.Assign)]
+		[Export("thumbOn")]
 		UIColor ThumbOn { get; set; }
 
 		// @property (nonatomic) UIColor * trackOn;
-		[Export ("trackOn", ArgumentSemantic.Assign)]
+		[Export("trackOn")]
 		UIColor TrackOn { get; set; }
 
 		// @property (nonatomic) UIColor * thumbOff;
-		[Export ("thumbOff", ArgumentSemantic.Assign)]
+		[Export("thumbOff")]
 		UIColor ThumbOff { get; set; }
 
 		// @property (nonatomic) UIColor * trackOff;
-		[Export ("trackOff", ArgumentSemantic.Assign)]
+		[Export("trackOff")]
 		UIColor TrackOff { get; set; }
 
 		// @property (nonatomic) UIColor * thumbDisabled;
-		[Export ("thumbDisabled", ArgumentSemantic.Assign)]
+		[Export("thumbDisabled")]
 		UIColor ThumbDisabled { get; set; }
 
 		// @property (nonatomic) UIColor * trackDisabled;
-		[Export ("trackDisabled", ArgumentSemantic.Assign)]
+		[Export("trackDisabled")]
 		UIColor TrackDisabled { get; set; }
 	}
 
 	// @protocol MDTabBarDelegate <NSObject>
 	[Protocol, Model]
-	[BaseType (typeof(NSObject))]
+	[BaseType(typeof(NSObject))]
 	interface MDTabBarDelegate
 	{
-		// @required -(void)tabBar:(MDTabBar * _Nonnull)tabBar didChangeSelectedIndex:(NSUInteger)selectedIndex;
+
+		// @required -(void)tabBar:(MDTabBar *)tabBar didChangeSelectedIndex:(NSUInteger)selectedIndex;
+		[Export("tabBar:didChangeSelectedIndex:")]
 		[Abstract]
-		[Export ("tabBar:didChangeSelectedIndex:")]
-		void DidChangeSelectedIndex (MDTabBar tabBar, nuint selectedIndex);
+		void DidChangeSelectedIndex(MDTabBar tabBar, nuint selectedIndex);
 	}
 
-	// @interface MDTabBar : UIView
-	[BaseType (typeof(UIView))]
+	// @interface MDTabBar : UIControl
+	[BaseType(typeof(UIControl))]
 	interface MDTabBar
 	{
-		// @property (nonatomic) UIColor * _Null_unspecified textColor;
-		[Export ("textColor", ArgumentSemantic.Assign)]
+
+		// @property (nonatomic) UIColor * textColor;
+		[Export("textColor")]
 		UIColor TextColor { get; set; }
 
-		// @property (nonatomic) UIColor * _Null_unspecified normalTextColor;
-		[Export ("normalTextColor", ArgumentSemantic.Assign)]
-		UIColor NormalTextColor { get; set; }
-
-		// @property (nonatomic) UIColor * _Null_unspecified backgroundColor;
-		[Export ("backgroundColor", ArgumentSemantic.Assign)]
+		// @property (nonatomic) UIColor * backgroundColor;
+		[Export("backgroundColor")]
 		UIColor BackgroundColor { get; set; }
 
-		// @property (nonatomic) UIColor * _Null_unspecified indicatorColor;
-		[Export ("indicatorColor", ArgumentSemantic.Assign)]
+		// @property (nonatomic) UIColor * indicatorColor;
+		[Export("indicatorColor")]
 		UIColor IndicatorColor { get; set; }
 
-		// @property (nonatomic) UIColor * _Null_unspecified rippleColor;
-		[Export ("rippleColor", ArgumentSemantic.Assign)]
+		// @property (nonatomic) UIColor * rippleColor;
+		[Export("rippleColor")]
 		UIColor RippleColor { get; set; }
 
-		// @property (nonatomic) UIFont * _Nullable textFont;
-		[NullAllowed, Export ("textFont", ArgumentSemantic.Assign)]
+		// @property (nonatomic) UIFont * textFont;
+		[Export("textFont")]
 		UIFont TextFont { get; set; }
 
-		// @property (nonatomic) UIFont * _Nullable normalTextFont;
-		[NullAllowed, Export ("normalTextFont", ArgumentSemantic.Assign)]
-		UIFont NormalTextFont { get; set; }
-
-		// @property (assign, nonatomic) CGFloat horizontalInset;
-		[Export ("horizontalInset")]
-		nfloat HorizontalInset { get; set; }
-
-		// @property (assign, nonatomic) CGFloat horizontalPaddingPerItem;
-		[Export ("horizontalPaddingPerItem")]
-		nfloat HorizontalPaddingPerItem { get; set; }
-
 		// @property (nonatomic) NSUInteger selectedIndex;
-		[Export ("selectedIndex")]
+		[Export("selectedIndex")]
 		nuint SelectedIndex { get; set; }
 
-		[Wrap ("WeakDelegate")]
+		// @property (nonatomic, weak) id<MDTabBarDelegate> delegate;
+		[Export("delegate", ArgumentSemantic.Weak)]
 		[NullAllowed]
-		MDTabBarDelegate Delegate { get; set; }
-
-		// @property (nonatomic, weak) id<MDTabBarDelegate> _Nullable delegate;
-		[NullAllowed, Export ("delegate", ArgumentSemantic.Weak)]
 		NSObject WeakDelegate { get; set; }
 
+		// @property (nonatomic, weak) id<MDTabBarDelegate> delegate;
+		[Wrap("WeakDelegate")]
+		MDTabBarDelegate Delegate { get; set; }
+
 		// @property (readonly, nonatomic) NSInteger numberOfItems;
-		[Export ("numberOfItems")]
+		[Export("numberOfItems")]
 		nint NumberOfItems { get; }
 
-		// -(void)setItems:(NSArray<id> * _Nonnull)items;
-		[Export ("setItems:")]
-		void SetItems (NSObject[] items);
+		// -(void)setItems:(NSArray *)items;
+		[Export("setItems:")]
+		void SetItems(NSObject[] items);
 
-		// -(void)insertItem:(id _Nonnull)item atIndex:(NSUInteger)index animated:(BOOL)animated;
-		[Export ("insertItem:atIndex:animated:")]
-		void InsertItem (NSObject item, nuint index, bool animated);
+		// -(void)insertItem:(id)item atIndex:(NSUInteger)index animated:(BOOL)animated;
+		[Export("insertItem:atIndex:animated:")]
+		void InsertItem(NSObject item, nuint index, bool animated);
 
 		// -(void)removeItemAtIndex:(NSUInteger)index animated:(BOOL)animated;
-		[Export ("removeItemAtIndex:animated:")]
-		void RemoveItemAtIndex (nuint index, bool animated);
+		[Export("removeItemAtIndex:animated:")]
+		void RemoveItemAtIndex(nuint index, bool animated);
 
-		// -(void)replaceItem:(id _Nonnull)item atIndex:(NSUInteger)index;
-		[Export ("replaceItem:atIndex:")]
-		void ReplaceItem (NSObject item, nuint index);
+		// -(void)replaceItem:(id)item atIndex:(NSUInteger)index;
+		[Export("replaceItem:atIndex:")]
+		void ReplaceItem(NSObject item, nuint index);
 
-		// -(NSArray<UIView *> * _Nonnull)tabs;
-		[Export ("tabs")]
-		[Verify (MethodToProperty)]
-		UIView[] Tabs { get; }
+		// -(NSMutableArray *)tabs;
+		[Export("tabs")]
+		NSMutableArray Tabs();
 
 		// -(void)moveIndicatorToFrame:(CGRect)frame withAnimated:(BOOL)animated;
-		[Export ("moveIndicatorToFrame:withAnimated:")]
-		void MoveIndicatorToFrame (CGRect frame, bool animated);
+		[Export("moveIndicatorToFrame:withAnimated:")]
+		void MoveIndicatorToFrame(CGRect frame, bool animated);
 	}
 
 	// @protocol MDTabBarViewControllerDelegate <NSObject>
 	[Protocol, Model]
-	[BaseType (typeof(NSObject))]
+	[BaseType(typeof(NSObject))]
 	interface MDTabBarViewControllerDelegate
 	{
-		// @required -(UIViewController * _Nonnull)tabBarViewController:(MDTabBarViewController * _Nonnull)viewController viewControllerAtIndex:(NSUInteger)index;
-		[Abstract]
-		[Export ("tabBarViewController:viewControllerAtIndex:")]
-		UIViewController TabBarViewController (MDTabBarViewController viewController, nuint index);
 
-		// @optional -(void)tabBarViewController:(MDTabBarViewController * _Nonnull)viewController didMoveToIndex:(NSUInteger)index;
-		[Export ("tabBarViewController:didMoveToIndex:")]
-		void TabBarViewController (MDTabBarViewController viewController, nuint index);
+		// @required -(UIViewController *)tabBarViewController:(MDTabBarViewController *)viewController viewControllerAtIndex:(NSUInteger)index;
+		[Export("tabBarViewController:viewControllerAtIndex:")]
+		[Abstract]
+		UIViewController ViewControllerAtIndex(MDTabBarViewController viewController, nuint index);
+
+		// @optional -(void)tabBarViewController:(MDTabBarViewController *)viewController didMoveToIndex:(NSUInteger)index;
+		[Export("tabBarViewController:didMoveToIndex:")]
+		void DidMoveToIndex(MDTabBarViewController viewController, nuint index);
 	}
 
 	// @interface MDTabBarViewController : UIViewController
-	[BaseType (typeof(UIViewController))]
+	[BaseType(typeof(UIViewController))]
 	interface MDTabBarViewController
 	{
-		// @property (readonly, nonatomic) MDTabBar * _Nonnull tabBar;
-		[Export ("tabBar")]
+
+		// -(instancetype)initWithDelegate:(id)delegate;
+		[Export("initWithDelegate:")]
+		IntPtr Constructor(NSObject Delegate);
+
+		// @property (readonly, nonatomic) MDTabBar * tabBar;
+		[Export("tabBar")]
 		MDTabBar TabBar { get; }
 
-		[Wrap ("WeakDelegate")]
+		// @property (nonatomic, weak) id<MDTabBarViewControllerDelegate> delegate;
+		[Export("delegate", ArgumentSemantic.Weak)]
 		[NullAllowed]
-		MDTabBarViewControllerDelegate Delegate { get; set; }
-
-		// @property (nonatomic, weak) id<MDTabBarViewControllerDelegate> _Nullable delegate;
-		[NullAllowed, Export ("delegate", ArgumentSemantic.Weak)]
 		NSObject WeakDelegate { get; set; }
 
-		// @property (nonatomic) NSUInteger selectedIndex;
-		[Export ("selectedIndex")]
-		nuint SelectedIndex { get; set; }
+		// @property (nonatomic, weak) id<MDTabBarViewControllerDelegate> delegate;
+		[Wrap("WeakDelegate")]
+		MDTabBarViewControllerDelegate Delegate { get; set; }
 
-		// -(instancetype _Nonnull)initWithDelegate:(id<MDTabBarViewControllerDelegate> _Nonnull)delegate;
-		[Export ("initWithDelegate:")]
-		IntPtr Constructor (MDTabBarViewControllerDelegate @delegate);
-
-		// -(void)setItems:(NSArray<id> * _Nonnull)items;
-		[Export ("setItems:")]
-		void SetItems (NSObject[] items);
+		// -(void)setItems:(NSArray *)items;
+		[Export("setItems:")]
+		void SetItems(NSObject[] items);
 	}
 
 	// @interface MDTableViewCell : UITableViewCell
-	[BaseType (typeof(UITableViewCell))]
+	[BaseType(typeof(UITableViewCell))]
 	interface MDTableViewCell
 	{
+		// -(instancetype)initWithFrame:(CGRect)frame;
+		[Export("initWithFrame:")]
+		IntPtr Constructor(CGRect frame);
+
+		// -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier;
+		[Export("initWithStyle:reuseIdentifier:")]
+		IntPtr Constructor(UITableViewCellStyle style, string reuseIdentifier);
+
 		// @property (nonatomic) UIColor * rippleColor;
-		[Export ("rippleColor", ArgumentSemantic.Assign)]
+		[Export("rippleColor")]
 		UIColor RippleColor { get; set; }
 	}
 
 	// @protocol MDTextFieldDelegate <NSObject>
 	[Protocol, Model]
-	[BaseType (typeof(NSObject))]
+	[BaseType(typeof(NSObject))]
 	interface MDTextFieldDelegate
 	{
-		// @optional -(void)textFieldDidChange:(MDTextField * _Nonnull)textField;
-		[Export ("textFieldDidChange:")]
-		void TextFieldDidChange (MDTextField textField);
 
-		// @optional -(BOOL)textFieldShouldBeginEditing:(MDTextField * _Nonnull)textField;
-		[Export ("textFieldShouldBeginEditing:")]
-		bool TextFieldShouldBeginEditing (MDTextField textField);
+		// @optional -(id)textFieldDidChange:(MDTextField *)textField;
+		[Export("textFieldDidChange:"), EventArgs("TextFieldTextChanged")]
+		void TextChanged(MDTextField textField);
 
-		// @optional -(void)textFieldDidBeginEditing:(MDTextField * _Nonnull)textField;
-		[Export ("textFieldDidBeginEditing:")]
-		void TextFieldDidBeginEditing (MDTextField textField);
+		// @optional -(BOOL)textFieldShouldBeginEditing:(MDTextField *)textField;
+		[Export("textFieldShouldBeginEditing:"), EventArgs("TextFieldShouldBeginEditing")]
+		[DefaultValue(true)]
+		bool ShouldBeginEditing(MDTextField textField);
 
-		// @optional -(BOOL)textFieldShouldEndEditing:(MDTextField * _Nonnull)textField;
-		[Export ("textFieldShouldEndEditing:")]
-		bool TextFieldShouldEndEditing (MDTextField textField);
+		// @optional -(void)textFieldDidBeginEditing:(MDTextField *)textField;
+		[Export("textFieldDidBeginEditing:"), EventArgs("TextFieldDidBeginEditing")]
+		void DidBeginEditing(MDTextField textField);
 
-		// @optional -(void)textFieldDidEndEditing:(MDTextField * _Nonnull)textField;
-		[Export ("textFieldDidEndEditing:")]
-		void TextFieldDidEndEditing (MDTextField textField);
+		// @optional -(BOOL)textFieldShouldEndEditing:(MDTextField *)textField;
+		[Export("textFieldShouldEndEditing:"), EventArgs("TextFieldShouldEndEditing")]
+		[DefaultValue(true)]
+		bool ShouldEndEditing(MDTextField textField);
 
-		// @optional -(BOOL)textField:(MDTextField * _Nonnull)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString * _Nonnull)string;
-		[Export ("textField:shouldChangeCharactersInRange:replacementString:")]
-		bool TextField (MDTextField textField, NSRange range, string @string);
+		// @optional -(void)textFieldDidEndEditing:(MDTextField *)textField;
+		[Export("textFieldDidEndEditing:")]
+		void DidEndEditing(MDTextField textField);
 
-		// @optional -(BOOL)textFieldShouldReturn:(MDTextField * _Nonnull)textField;
-		[Export ("textFieldShouldReturn:")]
-		bool TextFieldShouldReturn (MDTextField textField);
+		// @optional -(BOOL)textField:(MDTextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string;
+		[Export("textField:shouldChangeCharactersInRange:replacementString:"), EventArgs("TextFieldShouldChangeText")]
+		[DefaultValue(true)]
+		bool ShouldChangeText(MDTextField textField, NSRange range, string text);
+
+		// @optional -(BOOL)textFieldShouldReturn:(MDTextField *)textField;
+		[Export("textFieldShouldReturn:"), EventArgs("TextFieldShouldReturn")]
+		[DefaultValue(true)]
+		bool ShouldReturn(MDTextField textField);
 	}
 
 	// @interface MDTextField : UIControl
-	[BaseType (typeof(UIControl))]
+	[BaseType(typeof(UIControl), Delegates = new string[] { "WeakDelegate" },
+		Events = new Type[] { typeof(MDTextFieldDelegate) })]
 	interface MDTextField
 	{
-		// @property (nonatomic) NSString * _Null_unspecified hint;
-		[Export ("hint")]
+
+		// @property (nonatomic) NSString * hint;
+		[Export("hint")]
 		string Hint { get; set; }
 
-		// @property (nonatomic) NSString * _Null_unspecified label;
-		[Export ("label")]
+		// @property (nonatomic) NSString * label;
+		[Export("label")]
 		string Label { get; set; }
 
 		// @property (nonatomic) BOOL floatingLabel;
-		[Export ("floatingLabel")]
+		[Export("floatingLabel")]
 		bool FloatingLabel { get; set; }
 
 		// @property (nonatomic) BOOL highlightLabel;
-		[Export ("highlightLabel")]
+		[Export("highlightLabel")]
 		bool HighlightLabel { get; set; }
 
-		// @property (nonatomic) NSString * _Null_unspecified errorMessage;
-		[Export ("errorMessage")]
+		// @property (nonatomic) NSString * errorMessage;
+		[Export("errorMessage")]
 		string ErrorMessage { get; set; }
 
-		// @property (nonatomic) NSInteger maxCharacterCount;
-		[Export ("maxCharacterCount")]
-		nint MaxCharacterCount { get; set; }
+		// @property (nonatomic) int maxCharacterCount;
+		[Export("maxCharacterCount")]
+		int MaxCharacterCount { get; set; }
 
-		// @property (nonatomic) UIColor * _Null_unspecified normalColor;
-		[Export ("normalColor", ArgumentSemantic.Assign)]
+		// @property (nonatomic) UIColor * normalColor;
+		[Export("normalColor")]
 		UIColor NormalColor { get; set; }
 
-		// @property (nonatomic) UIColor * _Null_unspecified highlightColor;
-		[Export ("highlightColor", ArgumentSemantic.Assign)]
+		// @property (nonatomic) UIColor * highlightColor;
+		[Export("highlightColor")]
 		UIColor HighlightColor { get; set; }
 
-		// @property (nonatomic) UIColor * _Null_unspecified errorColor;
-		[Export ("errorColor", ArgumentSemantic.Assign)]
+		// @property (nonatomic) UIColor * errorColor;
+		[Export("errorColor")]
 		UIColor ErrorColor { get; set; }
 
-		// @property (nonatomic) UIColor * _Null_unspecified disabledColor;
-		[Export ("disabledColor", ArgumentSemantic.Assign)]
+		// @property (nonatomic) UIColor * disabledColor;
+		[Export("disabledColor")]
 		UIColor DisabledColor { get; set; }
 
-		// @property (nonatomic) UIColor * _Null_unspecified textColor;
-		[Export ("textColor", ArgumentSemantic.Assign)]
+		// @property (nonatomic) UIColor * textColor;
+		[Export("textColor")]
 		UIColor TextColor { get; set; }
 
-		// @property (nonatomic) UIColor * _Null_unspecified hintColor;
-		[Export ("hintColor", ArgumentSemantic.Assign)]
+		// @property (nonatomic) UIColor * hintColor;
+		[Export("hintColor")]
 		UIColor HintColor { get; set; }
 
-		// @property (getter = isEnabled, nonatomic) BOOL enabled;
-		[Export ("enabled")]
-		bool Enabled { [Bind ("isEnabled")] get; set; }
+		// @property (nonatomic, getter = isEnabled) BOOL enabled;
+		[Export("enabled")]
+		bool Enabled { [Bind("isEnabled")] get; set; }
 
 		// @property (nonatomic) BOOL autoComplete;
-		[Export ("autoComplete")]
+		[Export("autoComplete")]
 		bool AutoComplete { get; set; }
 
 		// @property (nonatomic) BOOL singleLine;
-		[Export ("singleLine")]
+		[Export("singleLine")]
 		bool SingleLine { get; set; }
 
 		// @property (nonatomic) BOOL fullWidth;
-		[Export ("fullWidth")]
+		[Export("fullWidth")]
 		bool FullWidth { get; set; }
 
-		// @property (nonatomic) NSInteger minVisibleLines;
-		[Export ("minVisibleLines")]
-		nint MinVisibleLines { get; set; }
+		// @property (nonatomic) int minVisibleLines;
+		[Export("minVisibleLines")]
+		int MinVisibleLines { get; set; }
 
-		// @property (nonatomic) NSInteger maxVisibleLines;
-		[Export ("maxVisibleLines")]
-		nint MaxVisibleLines { get; set; }
+		// @property (nonatomic) int maxVisibleLines;
+		[Export("maxVisibleLines")]
+		int MaxVisibleLines { get; set; }
 
-		// @property (nonatomic) NSString * _Null_unspecified text;
-		[Export ("text")]
+		// @property (nonatomic) NSString * text;
+		[Export("text")]
 		string Text { get; set; }
 
 		// @property (nonatomic) BOOL secureTextEntry;
-		[Export ("secureTextEntry")]
+		[Export("secureTextEntry")]
 		bool SecureTextEntry { get; set; }
 
-		// @property (nonatomic) BOOL dividerAnimation;
-		[Export ("dividerAnimation")]
-		bool DividerAnimation { get; set; }
-
-		// @property (nonatomic) BOOL restrictInBounds;
-		[Export ("restrictInBounds")]
-		bool RestrictInBounds { get; set; }
-
 		// @property (nonatomic) UIReturnKeyType returnKeyType;
-		[Export ("returnKeyType", ArgumentSemantic.Assign)]
+		[Export("returnKeyType")]
 		UIReturnKeyType ReturnKeyType { get; set; }
 
 		// @property (nonatomic) UIKeyboardType keyboardType;
-		[Export ("keyboardType", ArgumentSemantic.Assign)]
+		[Export("keyboardType")]
 		UIKeyboardType KeyboardType { get; set; }
 
 		// @property (nonatomic) BOOL hasError;
-		[Export ("hasError")]
+		[Export("hasError")]
 		bool HasError { get; set; }
 
-		// @property (nonatomic) UIFont * _Nonnull labelsFont;
-		[Export ("labelsFont", ArgumentSemantic.Assign)]
+		// @property (nonatomic) UIFont * labelsFont;
+		[Export("labelsFont")]
 		UIFont LabelsFont { get; set; }
 
-		// @property (nonatomic) UIFont * _Nonnull inputTextFont;
-		[Export ("inputTextFont", ArgumentSemantic.Assign)]
+		// @property (nonatomic) UIFont * inputTextFont;
+		[Export("inputTextFont")]
 		UIFont InputTextFont { get; set; }
 
-		// @property (nonatomic) NSLayoutConstraint * _Nonnull textViewHeightConstraint;
-		[Export ("textViewHeightConstraint", ArgumentSemantic.Assign)]
+		// @property (nonatomic) NSLayoutConstraint * textViewHeightConstraint;
+		[Export("textViewHeightConstraint")]
 		NSLayoutConstraint TextViewHeightConstraint { get; set; }
 
-		// @property (nonatomic) NSArray<NSString *> * _Nullable suggestionsDictionary;
-		[NullAllowed, Export ("suggestionsDictionary", ArgumentSemantic.Assign)]
-		string[] SuggestionsDictionary { get; set; }
+		// @property (nonatomic) NSArray * suggestionsDictionary;
+		[Export("suggestionsDictionary")]
+		NSObject[] SuggestionsDictionary { get; set; }
 
-		[Wrap ("WeakDelegate")]
+		// @property (nonatomic, weak) id<MDTextFieldDelegate> delegate;
+		[Export("delegate", ArgumentSemantic.Weak)]
 		[NullAllowed]
-		MDTextFieldDelegate Delegate { get; set; }
-
-		// @property (nonatomic, weak) id<MDTextFieldDelegate> _Nullable delegate;
-		[NullAllowed, Export ("delegate", ArgumentSemantic.Weak)]
 		NSObject WeakDelegate { get; set; }
 
-		// @property (readwrite, nonatomic, strong) UIView * _Nullable inputAccessoryView;
-		[NullAllowed, Export ("inputAccessoryView", ArgumentSemantic.Strong)]
-		UIView InputAccessoryView { get; set; }
+		// @property (nonatomic, weak) id<MDTextFieldDelegate> delegate;
+		[Wrap("WeakDelegate")]
+		MDTextFieldDelegate Delegate { get; set; }
+	}
 
-		// -(float)requiredHeightWithNumberOfTextLines:(NSUInteger)numberOfLines;
-		[Export ("requiredHeightWithNumberOfTextLines:")]
-		float RequiredHeightWithNumberOfTextLines (nuint numberOfLines);
+	// @protocol MDTimePickerDialogDelegate <NSObject>
+	[Protocol, Model]
+	[BaseType(typeof(NSObject))]
+	interface MDTimePickerDialogDelegate
+	{
+
+		// @required -(void)timePickerDialog:(MDTimePickerDialog *)timePickerDialog didSelectHour:(NSInteger)hour andMinute:(NSInteger)minute;
+		[Export("timePickerDialog:didSelectHour:andMinute:")]
+		[Abstract]
+		void DidSelectHour(MDTimePickerDialog timePickerDialog, nint hour, nint minute);
+	}
+
+	// @interface MDTimePickerDialog : UIButton <UIGestureRecognizerDelegate>
+	[BaseType(typeof(UIButton))]
+	interface MDTimePickerDialog : IUIGestureRecognizerDelegate
+	{
+
+		// -(instancetype)initWithHour:(NSInteger)hour andWithMinute:(NSInteger)minute;
+		[Export("initWithHour:andWithMinute:")]
+		IntPtr Constructor(nint hour, nint minute);
+
+		// @property (nonatomic) id<MDTimePickerDialogDelegate> delegate;
+		[Export("delegate")]
+		[NullAllowed]
+		NSObject WeakDelegate { get; set; }
+
+		// @property (nonatomic) id<MDTimePickerDialogDelegate> delegate;
+		[Wrap("WeakDelegate")]
+		MDTimePickerDialogDelegate Delegate { get; set; }
+
+		// @property (nonatomic) MDCalendarTimeMode timeMode;
+		[Export("timeMode")]
+		MDCalendarTimeMode TimeMode { get; set; }
+
+		// @property (nonatomic) UIView * header;
+		[Export("header")]
+		UIView Header { get; set; }
+
+		// @property (nonatomic) UILabel * headerLabelHour;
+		[Export("headerLabelHour")]
+		UILabel HeaderLabelHour { get; set; }
+
+		// @property (nonatomic) UILabel * headerLabelMinute;
+		[Export("headerLabelMinute")]
+		UILabel HeaderLabelMinute { get; set; }
+
+		// @property (nonatomic) UILabel * headerLabelTimeMode;
+		[Export("headerLabelTimeMode")]
+		UILabel HeaderLabelTimeMode { get; set; }
+
+		// @property (nonatomic) MDButton * buttonOk;
+		[Export("buttonOk")]
+		MDButton ButtonOk { get; set; }
+
+		// @property (nonatomic) MDButton * buttonCancel;
+		[Export("buttonCancel")]
+		MDButton ButtonCancel { get; set; }
+
+		// @property (nonatomic) UIFont * buttonFont;
+		[Export("buttonFont")]
+		UIFont ButtonFont { get; set; }
+
+		// -(void)show;
+		[Export("show")]
+		void Show();
+	}
+
+	// @interface MDToast : UIControl
+	[BaseType(typeof(UIControl))]
+	partial interface MDToast
+	{
+
+		// -(instancetype)initWithText:(NSString *)text duration:(double)duration;
+		[Export("initWithText:duration:")]
+		IntPtr Constructor(string text, double duration);
+
+		// @property (nonatomic) NSString * text;
+		[Export("text")]
+		string Text { get; set; }
+
+		// @property (nonatomic) UIColor * textColor;
+		[Export("textColor")]
+		UIColor TextColor { get; set; }
+
+		// @property (nonatomic) double duration;
+		[Export("duration")]
+		double Duration { get; set; }
+
+		// @property (readonly, nonatomic) BOOL isShowing;
+		[Export("isShowing")]
+		bool IsShowing { get; }
+
+		// -(void)show;
+		[Export("show")]
+		void Show();
+
+		// -(void)dismiss;
+		[Export("dismiss")]
+		void Dismiss();
+	}
+
+	// @interface UIColorHelper : NSObject
+	[BaseType(typeof(NSObject))]
+	interface UIColorHelper
+	{
+
+		// +(UIColor *)colorWithRGBA:(NSString *)rgba;
+		[Static, Export("colorWithRGBA:")]
+		UIColor ColorWithRGBA(string rgba);
+
+		// +(UIColor *)colorFromRGB:(NSString *)rgb withAlpha:(float)alpha;
+		[Static, Export("colorFromRGB:withAlpha:")]
+		UIColor ColorFromRGB(string rgb, float alpha);
+	}
+
+	// @interface UIFontHelper : NSObject
+	[BaseType(typeof(NSObject))]
+	interface UIFontHelper
+	{
+
+		// +(UIFont *)robotoFontWithName:(NSString *)fontName size:(CGFloat)fontSize;
+		[Static, Export("robotoFontWithName:size:")]
+		UIFont RobotoFontWithName(string fontName, nfloat fontSize);
+
+		// +(UIFont *)robotoFontOfSize:(CGFloat)fontSize;
+		[Static, Export("robotoFontOfSize:")]
+		UIFont RobotoFontOfSize(nfloat fontSize);
+
+		// +(UIFont *)boldRobotoFontOfSize:(CGFloat)fontSize;
+		[Static, Export("boldRobotoFontOfSize:")]
+		UIFont BoldRobotoFontOfSize(nfloat fontSize);
+
+		// +(NSString *)robotoFontName:(MDFontFamilySize)fontFamily withType:(MDFontFamilyType)fontType;
+		[Static, Export("robotoFontName:withType:")]
+		string RobotoFontName(MDFontFamilySize fontFamily, MDFontFamilyType fontType);
 	}
 
 	// @interface MDExtension (UIView)
 	[Category]
-	[BaseType (typeof(UIView))]
-	interface UIView_MDExtension
+	[BaseType(typeof(UIView))]
+	interface MDExtension
 	{
+
 		// @property (nonatomic) CGFloat mdWidth;
-		[Export ("mdWidth")]
+		[Export("mdWidth")]
+		[Static]
 		nfloat MdWidth { get; set; }
 
 		// @property (nonatomic) CGFloat mdHeight;
-		[Export ("mdHeight")]
+		[Export("mdHeight")]
+		[Static]
 		nfloat MdHeight { get; set; }
 
 		// @property (nonatomic) CGFloat mdTop;
-		[Export ("mdTop")]
+		[Export("mdTop")]
+		[Static]
 		nfloat MdTop { get; set; }
 
 		// @property (nonatomic) CGFloat mdLeft;
-		[Export ("mdLeft")]
+		[Export("mdLeft")]
+		[Static]
 		nfloat MdLeft { get; set; }
 
 		// @property (nonatomic) CGFloat mdBottom;
-		[Export ("mdBottom")]
+		[Export("mdBottom")]
+		[Static]
 		nfloat MdBottom { get; set; }
 
 		// @property (nonatomic) CGFloat mdRight;
-		[Export ("mdRight")]
+		[Export("mdRight")]
+		[Static]
 		nfloat MdRight { get; set; }
 
 		// @property (nonatomic) CGFloat mdCenterX;
-		[Export ("mdCenterX")]
+		[Export("mdCenterX")]
+		[Static]
 		nfloat MdCenterX { get; set; }
 
 		// @property (nonatomic) CGFloat mdCenterY;
-		[Export ("mdCenterY")]
+		[Export("mdCenterY")]
+		[Static]
 		nfloat MdCenterY { get; set; }
 	}
 
-	// @interface MDToast : UIControl
-	[BaseType (typeof(UIControl))]
-	interface MDToast
+	// @interface UIViewHelper : NSObject
+	[BaseType(typeof(NSObject))]
+	interface UIViewHelper
 	{
-		// @property (nonatomic) NSString * _Nullable text;
-		[NullAllowed, Export ("text")]
-		string Text { get; set; }
 
-		// @property (nonatomic) UIColor * _Nullable textColor;
-		[NullAllowed, Export ("textColor", ArgumentSemantic.Assign)]
-		UIColor TextColor { get; set; }
+		// +(NSLayoutConstraint *)addConstraintWithItem:(id)view1 attribute:(NSLayoutAttribute)attr1 relatedBy:(NSLayoutRelation)relation toItem:(id)view2 attribute:(NSLayoutAttribute)attr2 multiplier:(CGFloat)multiplier constant:(CGFloat)c toView:(UIView *)view;
+		[Static, Export("addConstraintWithItem:attribute:relatedBy:toItem:attribute:multiplier:constant:toView:")]
+		NSLayoutConstraint AddConstraintWithItem(NSObject view1, NSLayoutAttribute attr1, NSLayoutRelation relation, NSObject view2, NSLayoutAttribute attr2, nfloat multiplier, nfloat c, UIView view);
 
-		// @property (nonatomic) UIFont * _Nullable textFont;
-		[NullAllowed, Export ("textFont", ArgumentSemantic.Assign)]
-		UIFont TextFont { get; set; }
-
-		// @property (nonatomic) NSTimeInterval duration;
-		[Export ("duration")]
-		double Duration { get; set; }
-
-		// @property (readonly, nonatomic) BOOL isShowing;
-		[Export ("isShowing")]
-		bool IsShowing { get; }
-
-		// @property (nonatomic) MDGravity gravity;
-		[Export ("gravity", ArgumentSemantic.Assign)]
-		MDGravity Gravity { get; set; }
-
-		// -(instancetype _Nonnull)initWithText:(NSString * _Nonnull)text duration:(NSTimeInterval)duration;
-		[Export ("initWithText:duration:")]
-		IntPtr Constructor (string text, double duration);
-
-		// -(void)setGravity:(MDGravity)gravity xOffset:(int)xOffset yOffset:(int)yOffset;
-		[Export ("setGravity:xOffset:yOffset:")]
-		void SetGravity (MDGravity gravity, int xOffset, int yOffset);
-
-		// -(void)show;
-		[Export ("show")]
-		void Show ();
-
-		// -(void)dismiss;
-		[Export ("dismiss")]
-		void Dismiss ();
-	}
-
-	// @protocol MDTouchGestureRecognizerDelegate <NSObject>
-	[Protocol, Model]
-	[BaseType (typeof(NSObject))]
-	interface MDTouchGestureRecognizerDelegate
-	{
-		// @optional -(void)touchesBegan:(NSSet<UITouch *> * _Nonnull)touches withEvent:(UIEvent * _Nullable)event;
-		[Export ("touchesBegan:withEvent:")]
-		void TouchesBegan (NSSet<UITouch> touches, [NullAllowed] UIEvent @event);
-
-		// @optional -(void)touchesMoved:(NSSet<UITouch *> * _Nonnull)touches withEvent:(UIEvent * _Nullable)event;
-		[Export ("touchesMoved:withEvent:")]
-		void TouchesMoved (NSSet<UITouch> touches, [NullAllowed] UIEvent @event);
-
-		// @optional -(void)touchesCancelled:(NSSet<UITouch *> * _Nonnull)touches withEvent:(UIEvent * _Nullable)event;
-		[Export ("touchesCancelled:withEvent:")]
-		void TouchesCancelled (NSSet<UITouch> touches, [NullAllowed] UIEvent @event);
-
-		// @optional -(void)touchesEnded:(NSSet<UITouch *> * _Nonnull)touches withEvent:(UIEvent * _Nullable)event;
-		[Export ("touchesEnded:withEvent:")]
-		void TouchesEnded (NSSet<UITouch> touches, [NullAllowed] UIEvent @event);
-	}
-
-	// @interface MDTouchGestureRecognizer : UIGestureRecognizer
-	[BaseType (typeof(UIGestureRecognizer))]
-	interface MDTouchGestureRecognizer
-	{
-		[Wrap ("WeakTouchDelegate")]
-		[NullAllowed]
-		MDTouchGestureRecognizerDelegate TouchDelegate { get; set; }
-
-		// @property (nonatomic, weak) id<MDTouchGestureRecognizerDelegate> _Nullable touchDelegate;
-		[NullAllowed, Export ("touchDelegate", ArgumentSemantic.Weak)]
-		NSObject WeakTouchDelegate { get; set; }
-	}
-
-	// @interface MaterialControls : NSObject
-	[BaseType (typeof(NSObject))]
-	interface MaterialControls
-	{
+		// +(NSArray *)addConstraintsWithVisualFormat:(NSString *)format options:(NSLayoutFormatOptions)opts metrics:(NSDictionary *)metrics views:(NSDictionary *)views toView:(UIView *)view;
+		[Static, Export("addConstraintsWithVisualFormat:options:metrics:views:toView:")]
+		NSObject[] AddConstraintsWithVisualFormat(string format, NSLayoutFormatOptions opts, NSDictionary metrics, NSDictionary views, UIView view);
 	}
 }
+
+
