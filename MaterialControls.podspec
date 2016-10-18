@@ -11,8 +11,6 @@ Pod::Spec.new do |spec|
 
   spec.source_files       = 'MaterialControls/**/*'
   spec.ios.source_files   = 'MaterialControls/**/*'
-  spec.resource_bundles = {
-    'MaterialControls' => ['MaterialControls/*.png']
-  }
+
   spec.ios.framework  = 'UIKit', 'CoreGraphics', 'Foundation'
 end
