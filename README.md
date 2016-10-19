@@ -60,7 +60,7 @@ Component List
 
 #### MDTextField
 <p align="center">
-<img style="-webkit-user-select: none;" src="https://dl.dropboxusercontent.com/u/80802400/MaterialDesign/MDTextField.gif">
+<img style="-webkit-user-select: none;" src="https://dl.dropboxusercontent.com/u/80802400/MaterialDesign/MDTextField_v2.gif">
 </p>
 
 #### MDSnackbar
@@ -87,11 +87,22 @@ Component List
 # Get Started
 You can either use these controls in your app via 2 ways:
 <p>1. Add source code of those controls directly</p>
-<p>   Just download all source code files from this github repository and add those files directly to your XCode project.</p>
+<p>   Just download all source code files from this github repository and add those files directly to your Xcode project.</p>
 
 <p>2. Use via cocoapods</p>
 <p>   Add following line to Podfile:</p>
-<p>     pod 'MaterialControls', '~> 1.0.2'</p>
+<p>     pod 'MaterialControls', '~> 1.2.2'</p>
+
+# Some samples with floating button
+<p align="center">
+<img style="-webkit-user-select: none;" src="https://dl.dropboxusercontent.com/u/80802400/MaterialDesign/MDSamples_Flinging.gif">
+</p>
+<p align="center">
+<img style="-webkit-user-select: none;" src="https://dl.dropboxusercontent.com/u/80802400/MaterialDesign/MDSamples_Sheet.gif">
+</p>
+<p align="center">
+<img style="-webkit-user-select: none;" src="https://dl.dropboxusercontent.com/u/80802400/MaterialDesign/MDSamples_Toolbar.gif">
+</p>
 
 # Full controls documentation
 Please go to [Material Controls](https://github.com/fpt-software/Material-Controls-For-iOS/wiki) wiki to see full controls documentation.

@@ -97,6 +97,7 @@
                        context:(void *)context {
   if (object == self.superview && [keyPath isEqualToString:@"frame"]) {
     [self resizeItems];
+    [self updateSegmentsList];//#113
     [self moveIndicatorToSelectedIndexWithAnimated:NO];
   }
 }
