@@ -67,6 +67,10 @@
 }
 
 - (void)initLayer {
+  if (_mdLayer) {
+    [_mdLayer removeFromSuperlayer];
+    _mdLayer = nil;
+  }
   if (!_rippleColor)
     _rippleColor = [UIColor colorWithWhite:0.5 alpha:1];
 
