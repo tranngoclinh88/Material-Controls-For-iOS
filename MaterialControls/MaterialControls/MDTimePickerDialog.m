@@ -1085,7 +1085,15 @@
   int tag = (int)selectedButton.tag;
   CGFloat degreesToRotate;
   if (!_clockHour.hidden) {
-    self.currentHour = tag - 110;
+    if (_clockMode == MDClockMode12H) {
+      if (self.currentHour < 12) {
+        self.currentHour = (tag - 110) % 12;
+      } else {
+        self.currentHour = 12 + ((tag - 110) % 12);
+      }
+    } else {
+      self.currentHour = tag - 110;
+    }
     degreesToRotate = (_currentHour % 12) * 30;
     [self updateClockHand];
 
@@ -1097,7 +1105,7 @@
 
     preHourTag = tag;
   } else {
-    self.currentMinute = (tag - 110 - 24) * 5;
+    self.currentMinute = ((tag - 110 - 24) * 5) % 60;
     degreesToRotate = (_currentMinute / 5) * 30;
     if (preMinuteTag != -1) {
       [((UIButton *)[_clockMinute
