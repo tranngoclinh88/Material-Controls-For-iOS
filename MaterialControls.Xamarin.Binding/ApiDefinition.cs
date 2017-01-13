@@ -729,6 +729,10 @@ namespace MaterialControls
 		// -(void)setItems:(NSArray *)items;
 		[Export("setItems:")]
 		void SetItems(NSObject[] items);
+
+		// @property (nonatomic) NSUInteger selectedIndex;
+		[Export("selectedIndex")]
+		nuint SelectedIndex { get; set; }
 	}
 
 	// @interface MDTableViewCell : UITableViewCell
