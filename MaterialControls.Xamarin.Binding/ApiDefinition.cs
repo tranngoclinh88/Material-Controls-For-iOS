@@ -237,8 +237,8 @@ namespace MaterialControls
 	}
 
 	// @protocol MDDatePickerDialogDelegate <NSObject>
-	[Protocol, Model]
 	[BaseType(typeof(NSObject))]
+	[Protocol, Model]
 	interface MDDatePickerDialogDelegate
 	{
 
@@ -253,13 +253,20 @@ namespace MaterialControls
 	[BaseType(typeof(UIButton))]
 	interface MDDatePickerDialog
 	{
+		// @property(nullable, strong, nonatomic) NSDate* selectedDate;
+		[Export("selectedDate", ArgumentSemantic.Strong)]
+		NSDate SelectedDate { get; set; }
+
+		//@property (nonnull, strong, nonatomic) NSDate *minimumDate;
+		[Export("minimumDate", ArgumentSemantic.Retain)]
+		NSDate MinimumDate { get; set; }
 
 		// @property (nonatomic) id<MDDatePickerDialogDelegate> delegate;
-		[Export("delegate")]
+		[Export("delegate", ArgumentSemantic.Weak)]
 		[NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
-		// @property (nonatomic) id<MDDatePickerDialogDelegate> delegate;
+		// @property(weak, nonatomic, nullable) id<MDDatePickerDialogDelegate> delegate;
 		[Wrap("WeakDelegate")]
 		MDDatePickerDialogDelegate Delegate { get; set; }
 
@@ -1102,5 +1109,3 @@ namespace MaterialControls
 		NSObject[] AddConstraintsWithVisualFormat(string format, NSLayoutFormatOptions opts, NSDictionary metrics, NSDictionary views, UIView view);
 	}
 }
-
-
