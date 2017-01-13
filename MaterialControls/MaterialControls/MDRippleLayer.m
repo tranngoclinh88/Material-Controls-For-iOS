@@ -36,7 +36,7 @@
 @interface MDRippleLayer () <MDTouchGestureRecognizerDelegate, CAAnimationDelegate,
                              UIGestureRecognizerDelegate>
 
-@property CALayer *superLayer;
+@property (weak) CALayer *superLayer;
 @property CAShapeLayer *rippleLayer;
 @property CAShapeLayer *backgroundLayer;
 @property CAShapeLayer *maskLayer;
@@ -124,6 +124,12 @@
   } else if ([keyPath isEqualToString:@"cornerRadius"]) {
     [self setMaskLayerCornerRadius:_superLayer.cornerRadius];
   }
+}
+
+- (void)removeFromSuperlayer {
+  [super removeFromSuperlayer];
+  [_superLayer removeObserver:self forKeyPath:@"bounds"];
+  [_superLayer removeObserver:self forKeyPath:@"cornerRadius"];
 }
 
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
