@@ -1059,10 +1059,9 @@
 }
 
 - (void)setViewState:(MDTextFieldViewState)state {
-  if (_viewState != state) {
-    _viewState = state;
+  _viewState = state;
 
-    switch (state) {
+  switch (state) {
     case MDTextFieldViewStateNormal:
       if (!_fullWidth) {
         [_dividerHolder setState:MDTextFieldViewStateNormal];
@@ -1095,7 +1094,6 @@
 
     default:
       break;
-    }
   }
 }
 
