@@ -27,7 +27,7 @@
 
 @implementation MDSuggestPopupView {
   MDSuggestTableView *tableView;
-  MDTextField *mdTextField;
+  __weak MDTextField *mdTextField;
   NSMutableArray *suggestionOptions;
   UIView *popupHolder;
   float keyboardHeight;
