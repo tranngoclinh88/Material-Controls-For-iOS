@@ -115,6 +115,11 @@ NSString *AutoCompleteRowIdentifier = @"AutoCompleteRowIdentifier";
   [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+- (void)dealloc
+{
+    [self unregisterForKeyboardNotifications];
+}
+
 - (void)textView:(MDTextField *)textField didChangeText:(NSString *)text {
   if (mdTextField.autoComplete) {
     if ([text length] >= 1) {
