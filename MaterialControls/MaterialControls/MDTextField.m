@@ -166,7 +166,7 @@
   if (![_errorColor isEqual:errorColor]) {
     _errorColor = errorColor;
     if (_state == MDTextFieldViewStateError)
-      highlightLayer.strokeColor = _highlightColor.CGColor;
+      highlightLayer.strokeColor = _errorColor.CGColor;
   }
 }
 
@@ -298,7 +298,12 @@
   [highlightLayer setPath:linePath.CGPath];
   [highlightLayer setLineWidth:_highlightHeight];
   [highlightLayer setFillColor:[[UIColor clearColor] CGColor]];
-  [highlightLayer setStrokeColor:[_highlightColor CGColor]];
+  // use stroke color depending on current state
+    if (_state == MDTextFieldViewStateError) {
+        [highlightLayer setStrokeColor:[_errorColor CGColor]];
+    } else {
+        [highlightLayer setStrokeColor:[_highlightColor CGColor]];
+    }
 }
 
 - (void)drawDashedLineDivider {
@@ -1054,10 +1059,9 @@
 }
 
 - (void)setViewState:(MDTextFieldViewState)state {
-  if (_viewState != state) {
-    _viewState = state;
+  _viewState = state;
 
-    switch (state) {
+  switch (state) {
     case MDTextFieldViewStateNormal:
       if (!_fullWidth) {
         [_dividerHolder setState:MDTextFieldViewStateNormal];
@@ -1090,7 +1094,6 @@
 
     default:
       break;
-    }
   }
 }
 
