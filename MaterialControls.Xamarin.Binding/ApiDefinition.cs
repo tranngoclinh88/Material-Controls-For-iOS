@@ -638,6 +638,14 @@ namespace MaterialControls
 		[Export("indicatorColor")]
 		UIColor IndicatorColor { get; set; }
 
+		// @property(nonatomic, assign) CGFloat horizontalInset;
+		[Export("horizontalInset", ArgumentSemantic.Assign)]
+		float HorizontalInset { get; set; }
+
+		// @property(nonatomic, assign) CGFloat horizontalPaddingPerItem;
+		[Export("horizontalPaddingPerItem", ArgumentSemantic.Assign)]
+		float HorizontalPaddingPerItem { get; set; }
+
 		// @property (nonatomic) UIColor * rippleColor;
 		[Export("rippleColor")]
 		UIColor RippleColor { get; set; }
