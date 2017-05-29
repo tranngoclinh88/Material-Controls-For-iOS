@@ -730,6 +730,11 @@
   // Auto change default setting so that suggestView can show
   self.autoComplete = YES;
   self.singleLine = YES;
+    
+    // Hide suggestion when nothing to suggest
+    if (!suggestionsDictionary) {
+        suggestView.hidden = YES;
+    }
 }
 
 - (void)setText:(NSString *)text {
