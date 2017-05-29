@@ -10,3 +10,10 @@ MaterialControls/libMaterialControls-i386.a
 MaterialControls/libMaterialControls.a
 MaterialControls/Binding
 MaterialControls/sharpie-build
+[Bb]in/
+[Oo]bj/
+*.nupkg
+**/packages/*
+**/[Cc]omponents/*
+
+*.userprefs

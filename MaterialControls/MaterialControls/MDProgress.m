@@ -126,10 +126,11 @@
   if (_progressStyle != progressStyle) {
     _progressStyle = progressStyle;
     [drawingLayer removeFromSuperlayer];
+    drawingLayer.superLayer.sublayers = nil;
+      
     switch (progressStyle) {
     case MDProgressStyleCircular:
-      drawingLayer =
-          [[MDCircularProgressLayer alloc] initWithSuperLayer:self.layer];
+      drawingLayer = [[MDCircularProgressLayer alloc] initWithSuperLayer:self.layer];
       //      drawingLayer =
       //          [[MDCircularProgressLayer alloc]
       //          initWithSuperLayer:self.layer];

@@ -1337,4 +1337,11 @@
     return _textView.text.length;
 }
 
+#pragma mark Cleanup
+
+- (void)dealloc {
+    [suggestView removeFromSuperview];
+    suggestView = nil;
+}
+
 @end

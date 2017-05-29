@@ -1,24 +1,15 @@
 ﻿<Properties StartupConfiguration="{B8BDEFD6-0CFC-4D75-B91A-8C8D81CA7312}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="../MaterialControls.Xamarin.Binding/Properties/AssemblyInfo.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="../MaterialControls.Xamarin.Binding/ApiDefinition.cs">
     <Files>
-      <File FileName="Core/App.cs" Line="14" Column="44" />
-      <File FileName="Core/MockData.cs" Line="1" Column="1" />
-      <File FileName="iOS/Main.cs" Line="20" Column="2" />
-      <File FileName="Core/Helpers/Timer.cs" Line="1" Column="1" />
-      <File FileName="iOS/Views/ButtonView.designer.cs" Line="1" Column="1" />
-      <File FileName="iOS/Views/ButtonView.cs" Line="13" Column="3" />
-      <File FileName="iOS/Views/TabBarView.designer.cs" Line="1" Column="1" />
-      <File FileName="iOS/Views/TabBarView.cs" Line="16" Column="3" />
-      <File FileName="iOS/Views/TabBarViewControllerView.cs" Line="12" Column="71" />
-      <File FileName="iOS/Views/TextFieldView.cs" Line="31" Column="21" />
-      <File FileName="iOS/Views/TableViewView.cs" Line="17" Column="3" />
-      <File FileName="../MaterialControls.Xamarin.Binding/Properties/AssemblyInfo.cs" Line="25" Column="35" />
+      <File FileName="../MaterialControls.Xamarin.Binding/ApiDefinition.cs" Line="647" Column="16" />
+      <File FileName="iOS/Views/TabBarView.cs" Line="29" Column="38" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.ItemProperties.MaterialControls.Xamarin.Sample.iOS PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.A17B960B-9DA2-42FA-8B6D-07BE291FFC96" />
+  <MonoDevelop.Ide.ItemProperties.MaterialControls.Xamarin.Sample.iOS PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.56ADC5C1-4F1C-4931-A00B-32445FB29C66" />
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
 </Properties>
